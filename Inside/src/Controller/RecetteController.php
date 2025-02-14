@@ -1,28 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
-class RecetteController extends AbstractController
+final class RecetteController extends AbstractController
 {
-    #[Route('/recettes', name: 'freshmatch_recette', methods: ['GET'])]
-    public function list():void {}
-    #[Route('/recettes/read', name: 'freshmatch_recette_read', methods: ['GET'])]
-    public function read():void {}
-
-    #[Route('/recettes/créer', name: 'freshmatch_recette_create', methods: ['GET'])]
-    public function create():void {}
-
-    #[Route('/recettes/modifier', name: 'freshmatch_recette_update', methods: ['GET'])]
-    public function update():void {}
-    public function delete():void {}
-
-
+    #[Route('/recette', name: 'app_recette')]
+    public function index(): Response
+    {
+        return $this->render('recette/index.html.twig', [
+            'controller_name' => 'RecetteController',
+        ]);
+    }
 }
-
-?>
