@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use Allergie;
+use  App\Enums\Allergie;
 use App\Repository\RecetteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use RegimeAlimentaire;
+use App\Enums\RegimeAlimentaire;
 
 #[ORM\Entity(repositoryClass: RecetteRepository::class)]
 class Recette
