@@ -1,18 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
-class RechercheController extends AbstractController
+final class RechercheController extends AbstractController
 {
-    #[Route('/', name: 'freshmatch_recherche', methods: ['GET'])]
-    public function list():void {}
-
+    #[Route('/recherche', name: 'app_recherche')]
+    public function index(): Response
+    {
+        return $this->render('recherche/index.html.twig', [
+            'controller_name' => 'RechercheController',
+        ]);
+    }
 }
-
-?>

@@ -2,8 +2,13 @@
 
 namespace App\Entity;
 
+use App\Enums\Allergie;;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Enums\RegimeAlimentaire;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -22,6 +27,28 @@ class User
 
     #[ORM\Column(length: 255)]
     private ?string $motDePasse = null;
+
+    #[ORM\OneToOne(mappedBy: 'utilisateur', cascade: ['persist', 'remove'])]
+    private ?ListIngrUtilisateur $listIngrUtilisateur = null;
+
+    /**
+     * @var Collection<int, Recette>
+     */
+    #[ORM\OneToMany(targetEntity: Recette::class, mappedBy: 'utilisateur')]
+    private Collection $recettes;
+
+
+
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergie::class)]
+    private ?array $allergie = null;
+
+    #[ORM\Column(nullable: true, enumType: RegimeAlimentaire::class)]
+    private ?RegimeAlimentaire $regimeAlimentaire = null;
+
+    public function __construct()
+    {
+        $this->recettes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -67,6 +94,80 @@ class User
     public function setMotDePasse(string $motDePasse): static
     {
         $this->motDePasse = $motDePasse;
+
+        return $this;
+    }
+
+    public function getListIngrUtilisateur(): ?ListIngrUtilisateur
+    {
+        return $this->listIngrUtilisateur;
+    }
+
+    public function setListIngrUtilisateur(ListIngrUtilisateur $listIngrUtilisateur): static
+    {
+        // set the owning side of the relation if necessary
+        if ($listIngrUtilisateur->getUtilisateur() !== $this) {
+            $listIngrUtilisateur->setUtilisateur($this);
+        }
+
+        $this->listIngrUtilisateur = $listIngrUtilisateur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Recette>
+     */
+    public function getRecettes(): Collection
+    {
+        return $this->recettes;
+    }
+
+    public function addRecette(Recette $recette): static
+    {
+        if (!$this->recettes->contains($recette)) {
+            $this->recettes->add($recette);
+            $recette->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecette(Recette $recette): static
+    {
+        if ($this->recettes->removeElement($recette)) {
+            // set the owning side to null (unless already changed)
+            if ($recette->getUtilisateur() === $this) {
+                $recette->setUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Allergie[]|null
+     */
+    public function getAllergie(): ?array
+    {
+        return $this->allergie;
+    }
+
+    public function setAllergie(?array $allergie): static
+    {
+        $this->allergie = $allergie;
+
+        return $this;
+    }
+
+    public function getRegimeAlimentaire(): ?RegimeAlimentaire
+    {
+        return $this->regimeAlimentaire;
+    }
+
+    public function setRegimeAlimentaire(?RegimeAlimentaire $regimeAlimentaire): static
+    {
+        $this->regimeAlimentaire = $regimeAlimentaire;
 
         return $this;
     }
