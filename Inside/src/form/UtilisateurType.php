@@ -2,31 +2,23 @@
 
 namespace App\form;
 
-use App\Entity\IngredientRecette;
-use App\Entity\Recette;
+use App\Entity\ListIngrUtilisateur;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RecetteType extends AbstractType
+class UtilisateurType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('duree')
             ->add('nom')
-            ->add('description')
-            ->add('etape')
-            ->add('nbPersonne')
-            ->add('ingredientRecette', EntityType::class, [
-                'class' => IngredientRecette::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
-            ->add('utilisateur', EntityType::class, [
-                'class' => User::class,
+            ->add('mail')
+            ->add('motDePasse')
+            ->add('listIngrUtilisateur', EntityType::class, [
+                'class' => ListIngrUtilisateur::class,
                 'choice_label' => 'id',
             ])
         ;
@@ -35,7 +27,7 @@ class RecetteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Recette::class,
+            'data_class' => User::class,
         ]);
     }
 }
