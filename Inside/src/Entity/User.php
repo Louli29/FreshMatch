@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use Allergie;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use RegimeAlimentaire;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -33,6 +36,14 @@ class User
      */
     #[ORM\OneToMany(targetEntity: Recette::class, mappedBy: 'utilisateur')]
     private Collection $recettes;
+
+
+
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergie::class)]
+    private ?array $allergie = null;
+
+    #[ORM\Column(nullable: true, enumType: RegimeAlimentaire::class)]
+    private ?RegimeAlimentaire $regimeAlimentaire = null;
 
     public function __construct()
     {
@@ -130,6 +141,33 @@ class User
                 $recette->setUtilisateur(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Allergie[]|null
+     */
+    public function getAllergie(): ?array
+    {
+        return $this->allergie;
+    }
+
+    public function setAllergie(?array $allergie): static
+    {
+        $this->allergie = $allergie;
+
+        return $this;
+    }
+
+    public function getRegimeAlimentaire(): ?RegimeAlimentaire
+    {
+        return $this->regimeAlimentaire;
+    }
+
+    public function setRegimeAlimentaire(?RegimeAlimentaire $regimeAlimentaire): static
+    {
+        $this->regimeAlimentaire = $regimeAlimentaire;
 
         return $this;
     }
