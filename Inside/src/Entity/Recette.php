@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RecetteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecetteRepository::class)]
@@ -27,6 +29,21 @@ class Recette
 
     #[ORM\Column]
     private ?int $nbPersonne = null;
+
+    /**
+     * @var Collection<int, IngredientRecette>
+     */
+    #[ORM\ManyToMany(targetEntity: IngredientRecette::class, inversedBy: 'recette')]
+    private Collection $ingredientRecette;
+
+    #[ORM\ManyToOne(inversedBy: 'recettes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $utilisateur = null;
+
+    public function __construct()
+    {
+        $this->ingredientRecette = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -96,6 +113,42 @@ class Recette
     public function setNbPersonne(int $nbPersonne): static
     {
         $this->nbPersonne = $nbPersonne;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, IngredientRecette>
+     */
+    public function getIngredientRecette(): Collection
+    {
+        return $this->ingredientRecette;
+    }
+
+    public function addIngredientRecette(IngredientRecette $ingredientRecette): static
+    {
+        if (!$this->ingredientRecette->contains($ingredientRecette)) {
+            $this->ingredientRecette->add($ingredientRecette);
+        }
+
+        return $this;
+    }
+
+    public function removeIngredientRecette(IngredientRecette $ingredientRecette): static
+    {
+        $this->ingredientRecette->removeElement($ingredientRecette);
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?User
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?User $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }
