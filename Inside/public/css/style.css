@@ -25,7 +25,7 @@
     cursor: pointer;
 }
 
-.container{
+.header-container {
     margin-left: 20px;
     font-size: 60px; /* <----------- MODIF ICI */
 }
@@ -47,3 +47,58 @@
 .savoure {
     color: #076407; 
 }
+
+/*Section FOOTER*/
+.footer {
+  background: #CDA37B;
+  padding: 30px 20px;
+  color: white;
+}
+
+.footer-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.footer-container h2 {
+  margin-bottom: 20px;
+}
+
+.footer-columns {
+  display: flex;
+  justify-content: center; 
+ 
+}
+
+.footer-column {
+  flex: 1;
+  padding: 0 15px;
+  max-width: 250px;  /* Limite la largeur des colonnes pour un meilleur alignement */
+  text-align: left;  /* Aligne le texte à gauche dans chaque colonne */
+}
+
+.footer-column h5 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.footer-column ul {
+  list-style-type: none;
+}
+
+.footer-column ul li {
+  margin-bottom: 10px;
+}
+
+.footer-column ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-column ul li a:hover {
+  text-decoration: underline;
+}
+
+  
+  
+  
