@@ -27,7 +27,9 @@
 
 
 .header-container{
-
+    margin-left: 20px;
+    font-size: 60px; /* <----------- MODIF ICI */
+}
 
 .match {
     color: #076407; 
@@ -98,6 +100,58 @@
   text-decoration: underline;
 }
 
-  
-  
-  
+/*HomePage*/
+
+.first-article {
+    background-color: #F9EEE0;
+}
+
+.title{
+    padding: 10px;
+    color: #4B8947;
+    text-align: center;
+    font-size: 30px;
+    padding-top: 30px;
+}
+
+.container-homepage {
+    text-align: center;
+    padding: 20px;
+}
+
+.buttonIngredient{
+    background-color: #4B8947; 
+    color: white; 
+    font-weight: bold;
+    font-size: 30px; 
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;; 
+    cursor: pointer;
+}
+
+.title2{
+    padding: 30px;
+    color: white;
+    text-align: center;
+    font-size: 30px;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.second-article{
+    background: linear-gradient(to bottom, #095227, #4B8947);
+}
+
+.second-article img{
+    background: linear-gradient(to bottom, #095227, #4B8947);
+    width: 100px; 
+    height: 100px;
+
+}
+
+
+
