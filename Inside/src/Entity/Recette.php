@@ -49,6 +49,21 @@ class Recette
     #[ORM\Column(nullable: true, enumType: RegimeAlimentaire::class)]
     private ?RegimeAlimentaire $regimeAlimentaire = null;
 
+    #[ORM\Column(type: 'string')]
+    private string $imageLink;
+
+    public function getImageLink(): string
+    {
+        return $this->imageLink;
+    }
+
+    public function setImageLink(string $imageLink): self
+    {
+        $this->imageLink = $imageLink;
+
+        return $this;
+    }
+
     public function __construct()
     {
         $this->ingredientRecette = new ArrayCollection();

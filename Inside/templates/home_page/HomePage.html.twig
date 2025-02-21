@@ -2,30 +2,30 @@
 
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="../Style_Sheets/Homepage_css.css">
+    <link href="{{asset('/css/style.css')}}" rel="stylesheet">
 {% endblock %}
 
 {% block main %}
-    <article>
-        <h4> Dis-nous ce que tu as, on te dira quoi cuisinier !</h4>
-
-        <input type ="button" value = "Fait vibrer tes ingrédients !">
-
+    <article class="first-article">
+        <h4 class="title"> Dis-nous ce que tu as, on te dira quoi cuisinier !</h4>
+        <div class="container-homepage">
+         <button class="buttonIngredient">Fais parler tes ingrédients !</button> 
+        </div>
     </article>
-    <article>
-        <h4> Nos recettes top chrono </h4>
+
+    <article class="second-article">
+        <h4 class="title2"> Nos recettes top chrono </h4>
         <table>
             <tr>
-                <td><img src="..." alt ="text alternatif"> </td>
-                <td><img src="..." alt ="text alternatif"> </td>
-                <td><img src="..." alt ="text alternatif"> </td>
+                <td><img src="pictures/recette1.jpg" alt ="text alternatif"> </td>
+                <td><img src="pictures/recette2.jpg" alt ="text alternatif"> </td>
+                <td><img src="pictures/recette3.jpg" alt ="text alternatif"> </td>
             </tr>
             <tr>
-                <td><img src="..." alt ="text alternatif"> </td>
-                <td><img src="..." alt ="text alternatif"> </td>
-                <td><img src="..." alt ="text alternatif"> </td>
+                <td><img src="pictures/recette4.jpg" alt ="text alternatif"> </td>
+                <td><img src="pictures/recette5.jpg" alt ="text alternatif"> </td>
+                <td><img src="pictures/recette6.jpg" alt ="text alternatif"> </td>
             </tr>
         </table>
-
     </article>
 {% endblock %}
