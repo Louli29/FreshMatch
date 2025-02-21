@@ -1,6 +1,6 @@
 <?php
 
-namespace App\form;
+namespace App\Form;
 
 use App\Entity\Ingredient;
 use App\Entity\IngredientRecipe;
@@ -22,7 +22,7 @@ class IngredientRecipeType extends AbstractType
                 'class' => Ingredient::class,
                 'choice_label' => 'id',
             ])
-            ->add('recipe', EntityType::class, [
+            ->add('recette', EntityType::class, [
                 'class' => Recipe::class,
                 'choice_label' => 'id',
                 'multiple' => true,

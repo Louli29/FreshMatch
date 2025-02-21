@@ -32,11 +32,11 @@ class IngredientRecipe
      * @var Collection<int, Recipe>
      */
     #[ORM\ManyToMany(targetEntity: Recipe::class, mappedBy: 'ingredientRecipe')]
-    private Collection $Recipe;
+    private Collection $recipe;
 
     public function __construct()
     {
-        $this->Recipe = new ArrayCollection();
+        $this->recipe = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -97,23 +97,23 @@ class IngredientRecipe
      */
     public function getRecipe(): Collection
     {
-        return $this->Recipe;
+        return $this->recipe;
     }
 
-    public function addRecipe(Recipe $Recipe): static
+    public function addRecipe(Recipe $recipe): static
     {
-        if (!$this->Recipe->contains($Recipe)) {
-            $this->Recipe->add($Recipe);
-            $Recipe->addIngredientRecipe($this);
+        if (!$this->recipe->contains($recipe)) {
+            $this->recipe->add($recipe);
+            $recipe->addIngredientRecipe($this);
         }
 
         return $this;
     }
 
-    public function removeRecipe(Recipe $Recipe): static
+    public function removeRecipe(Recipe $recipe): static
     {
-        if ($this->Recipe->removeElement($Recipe)) {
-            $Recipe->removeIngredientRecipe($this);
+        if ($this->recipe->removeElement($recipe)) {
+            $recipe->removeIngredientRecipe($this);
         }
 
         return $this;

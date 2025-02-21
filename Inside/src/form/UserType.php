@@ -1,6 +1,6 @@
 <?php
 
-namespace App\form;
+namespace App\Form;
 
 use App\Entity\ListIngrUser;
 use App\Entity\User;
@@ -17,7 +17,7 @@ class UserType extends AbstractType
             ->add('nom')
             ->add('mail')
             ->add('motDePasse')
-            ->add('listIngrUser', EntityType::class, [
+            ->add('listIngrUtilisateur', EntityType::class, [
                 'class' => ListIngrUser::class,
                 'choice_label' => 'id',
             ])

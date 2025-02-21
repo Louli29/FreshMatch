@@ -1,6 +1,6 @@
 <?php
 
-namespace App\form;
+namespace App\Form;
 
 use App\Entity\Ingredient;
 use App\Entity\ListIngrUser;
@@ -20,7 +20,7 @@ class ListIngrUserType extends AbstractType
                 'choice_label' => 'id',
                 'multiple' => true,
             ])
-            ->add('user', EntityType::class, [
+            ->add('utilisateur', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'id',
             ])
