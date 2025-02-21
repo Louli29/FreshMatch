@@ -19,39 +19,54 @@ class Recipe
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $duree = null;
+    private ?int $time = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $etape = null;
+    private ?string $step = null;
 
     #[ORM\Column]
-    private ?int $nbPersonne = null;
+    private ?int $nbPerson = null;
 
     /**
      * @var Collection<int, IngredientRecipe>
      */
-    #[ORM\ManyToMany(targetEntity: IngredientRecipe::class, inversedBy: 'recette')]
-    private Collection $ingredientRecette;
+    #[ORM\ManyToMany(targetEntity: IngredientRecipe::class, inversedBy: 'Recipe')]
+    private Collection $ingredientRecipe;
 
-    #[ORM\ManyToOne(inversedBy: 'recettes')]
+    #[ORM\ManyToOne(inversedBy: 'Recipes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $utilisateur = null;
+    private ?User $user = null;
 
     #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergy::class)]
-    private ?array $allergies = null;
+    private ?array $allergys = null;
 
     #[ORM\Column(nullable: true, enumType: Diet::class)]
-    private ?Diet $regimeAlimentaire = null;
+    private ?Diet $diet = null;
+
+    #[ORM\Column(type: 'string')]
+    private string $imageLink;
+
+    public function getImageLink(): string
+    {
+        return $this->imageLink;
+    }
+
+    public function setImageLink(string $imageLink): self
+    {
+        $this->imageLink = $imageLink;
+
+        return $this;
+    }
 
     public function __construct()
     {
-        $this->ingredientRecette = new ArrayCollection();
+        $this->ingredientRecipe = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,26 +81,26 @@ class Recipe
         return $this;
     }
 
-    public function getDuree(): ?int
+    public function getTime(): ?int
     {
-        return $this->duree;
+        return $this->time;
     }
 
-    public function setDuree(int $duree): static
+    public function setTime(int $time): static
     {
-        $this->duree = $duree;
+        $this->time = $time;
 
         return $this;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->nom;
+        return $this->name;
     }
 
-    public function setNom(string $nom): static
+    public function setName(string $name): static
     {
-        $this->nom = $nom;
+        $this->name = $name;
 
         return $this;
     }
@@ -102,26 +117,26 @@ class Recipe
         return $this;
     }
 
-    public function getEtape(): ?string
+    public function getStep(): ?string
     {
-        return $this->etape;
+        return $this->step;
     }
 
-    public function setEtape(string $etape): static
+    public function setStep(string $step): static
     {
-        $this->etape = $etape;
+        $this->step = $step;
 
         return $this;
     }
 
-    public function getNbPersonne(): ?int
+    public function getNbPerson(): ?int
     {
-        return $this->nbPersonne;
+        return $this->nbPerson;
     }
 
-    public function setNbPersonne(int $nbPersonne): static
+    public function setNbPerson(int $nbPerson): static
     {
-        $this->nbPersonne = $nbPersonne;
+        $this->nbPerson = $nbPerson;
 
         return $this;
     }
@@ -129,35 +144,35 @@ class Recipe
     /**
      * @return Collection<int, IngredientRecipe>
      */
-    public function getIngredientRecette(): Collection
+    public function getIngredientRecipe(): Collection
     {
-        return $this->ingredientRecette;
+        return $this->ingredientRecipe;
     }
 
-    public function addIngredientRecette(IngredientRecipe $ingredientRecette): static
+    public function addIngredientRecipe(IngredientRecipe $ingredientRecipe): static
     {
-        if (!$this->ingredientRecette->contains($ingredientRecette)) {
-            $this->ingredientRecette->add($ingredientRecette);
+        if (!$this->ingredientRecipe->contains($ingredientRecipe)) {
+            $this->ingredientRecipe->add($ingredientRecipe);
         }
 
         return $this;
     }
 
-    public function removeIngredientRecette(IngredientRecipe $ingredientRecette): static
+    public function removeIngredientRecipe(IngredientRecipe $ingredientRecipe): static
     {
-        $this->ingredientRecette->removeElement($ingredientRecette);
+        $this->ingredientRecipe->removeElement($ingredientRecipe);
 
         return $this;
     }
 
-    public function getUtilisateur(): ?User
+    public function getUser(): ?User
     {
-        return $this->utilisateur;
+        return $this->user;
     }
 
-    public function setUtilisateur(?User $utilisateur): static
+    public function setUser(?User $user): static
     {
-        $this->utilisateur = $utilisateur;
+        $this->user = $user;
 
         return $this;
     }
@@ -165,26 +180,26 @@ class Recipe
     /**
      * @return Allergy[]|null
      */
-    public function getAllergies(): ?array
+    public function getAllergys(): ?array
     {
-        return $this->allergies;
+        return $this->allergys;
     }
 
-    public function setAllergies(?array $allergies): static
+    public function setAllergys(?array $allergys): static
     {
-        $this->allergies = $allergies;
+        $this->allergys = $allergys;
 
         return $this;
     }
 
-    public function getRegimeAlimentaire(): ?Diet
+    public function getDiet(): ?Diet
     {
-        return $this->regimeAlimentaire;
+        return $this->diet;
     }
 
-    public function setRegimeAlimentaire(?Diet $regimeAlimentaire): static
+    public function setDiet(?Diet $diet): static
     {
-        $this->regimeAlimentaire = $regimeAlimentaire;
+        $this->diet = $diet;
 
         return $this;
     }

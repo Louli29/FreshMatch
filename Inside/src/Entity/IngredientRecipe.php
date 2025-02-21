@@ -16,7 +16,7 @@ class IngredientRecipe
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $quantite = null;
+    private ?int $quantity = null;
 
     #[ORM\Column]
     private ?bool $remplacable = null;
@@ -31,12 +31,12 @@ class IngredientRecipe
     /**
      * @var Collection<int, Recipe>
      */
-    #[ORM\ManyToMany(targetEntity: Recipe::class, mappedBy: 'ingredientRecette')]
-    private Collection $recette;
+    #[ORM\ManyToMany(targetEntity: Recipe::class, mappedBy: 'ingredientRecipe')]
+    private Collection $recipe;
 
     public function __construct()
     {
-        $this->recette = new ArrayCollection();
+        $this->recipe = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -44,14 +44,14 @@ class IngredientRecipe
         return $this->id;
     }
 
-    public function getQuantite(): ?int
+    public function getQuantity(): ?int
     {
-        return $this->quantite;
+        return $this->quantity;
     }
 
-    public function setQuantite(int $quantite): static
+    public function setQuantity(int $quantite): static
     {
-        $this->quantite = $quantite;
+        $this->quantity = $quantite;
 
         return $this;
     }
@@ -95,25 +95,25 @@ class IngredientRecipe
     /**
      * @return Collection<int, Recipe>
      */
-    public function getRecette(): Collection
+    public function getRecipe(): Collection
     {
-        return $this->recette;
+        return $this->recipe;
     }
 
-    public function addRecette(Recipe $recette): static
+    public function addRecipe(Recipe $recipe): static
     {
-        if (!$this->recette->contains($recette)) {
-            $this->recette->add($recette);
-            $recette->addIngredientRecette($this);
+        if (!$this->recipe->contains($recipe)) {
+            $this->recipe->add($recipe);
+            $recipe->addIngredientRecipe($this);
         }
 
         return $this;
     }
 
-    public function removeRecette(Recipe $recette): static
+    public function removeRecipe(Recipe $recipe): static
     {
-        if ($this->recette->removeElement($recette)) {
-            $recette->removeIngredientRecette($this);
+        if ($this->recipe->removeElement($recipe)) {
+            $recipe->removeIngredientRecipe($this);
         }
 
         return $this;

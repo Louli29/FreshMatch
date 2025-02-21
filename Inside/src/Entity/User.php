@@ -20,34 +20,34 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     private ?string $mail = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $motDePasse = null;
+    private ?string $password = null;
 
-    #[ORM\OneToOne(mappedBy: 'utilisateur', cascade: ['persist', 'remove'])]
-    private ?ListIngrUser $listIngrUtilisateur = null;
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?ListIngrUser $listIngrUser = null;
 
     /**
      * @var Collection<int, Recipe>
      */
-    #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'utilisateur')]
-    private Collection $recettes;
+    #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'user')]
+    private Collection $recipe;
 
 
 
     #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergy::class)]
-    private ?array $allergie = null;
+    private ?array $allergy = null;
 
     #[ORM\Column(nullable: true, enumType: Diet::class)]
-    private ?Diet $regimeAlimentaire = null;
+    private ?Diet $diet = null;
 
     public function __construct()
     {
-        $this->recettes = new ArrayCollection();
+        $this->recipe = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -62,14 +62,14 @@ class User
         return $this;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->nom;
+        return $this->name;
     }
 
-    public function setNom(string $nom): static
+    public function setName(string $nom): static
     {
-        $this->nom = $nom;
+        $this->name = $nom;
 
         return $this;
     }
@@ -86,31 +86,31 @@ class User
         return $this;
     }
 
-    public function getMotDePasse(): ?string
+    public function getPassword(): ?string
     {
-        return $this->motDePasse;
+        return $this->password;
     }
 
-    public function setMotDePasse(string $motDePasse): static
+    public function setPassword(string $motDePasse): static
     {
-        $this->motDePasse = $motDePasse;
+        $this->password = $motDePasse;
 
         return $this;
     }
 
-    public function getListIngrUtilisateur(): ?ListIngrUser
+    public function getListIngrUser(): ?ListIngrUser
     {
-        return $this->listIngrUtilisateur;
+        return $this->listIngrUser;
     }
 
-    public function setListIngrUtilisateur(ListIngrUser $listIngrUtilisateur): static
+    public function setListIngrUser(ListIngrUser $listIngrUser): static
     {
         // set the owning side of the relation if necessary
-        if ($listIngrUtilisateur->getUtilisateur() !== $this) {
-            $listIngrUtilisateur->setUtilisateur($this);
+        if ($listIngrUser->getUser() !== $this) {
+            $listIngrUser->setUser($this);
         }
 
-        $this->listIngrUtilisateur = $listIngrUtilisateur;
+        $this->listIngrUser = $listIngrUser;
 
         return $this;
     }
@@ -118,27 +118,27 @@ class User
     /**
      * @return Collection<int, Recipe>
      */
-    public function getRecettes(): Collection
+    public function getRecipe(): Collection
     {
-        return $this->recettes;
+        return $this->recipe;
     }
 
-    public function addRecette(Recipe $recette): static
+    public function addRecette(Recipe $recipe): static
     {
-        if (!$this->recettes->contains($recette)) {
-            $this->recettes->add($recette);
-            $recette->setUtilisateur($this);
+        if (!$this->recipe->contains($recipe)) {
+            $this->recipe->add($recipe);
+            $recipe->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeRecette(Recipe $recette): static
+    public function removeRecette(Recipe $recipe): static
     {
-        if ($this->recettes->removeElement($recette)) {
+        if ($this->recipe->removeElement($recipe)) {
             // set the owning side to null (unless already changed)
-            if ($recette->getUtilisateur() === $this) {
-                $recette->setUtilisateur(null);
+            if ($recipe->getUser() === $this) {
+                $recipe->setUser(null);
             }
         }
 
@@ -148,26 +148,26 @@ class User
     /**
      * @return Allergy[]|null
      */
-    public function getAllergie(): ?array
+    public function getAllergy(): ?array
     {
-        return $this->allergie;
+        return $this->allergy;
     }
 
-    public function setAllergie(?array $allergie): static
+    public function setAllergy(?array $allergie): static
     {
-        $this->allergie = $allergie;
+        $this->allergy = $allergie;
 
         return $this;
     }
 
-    public function getRegimeAlimentaire(): ?Diet
+    public function getDiet(): ?Diet
     {
-        return $this->regimeAlimentaire;
+        return $this->diet;
     }
 
     public function setRegimeAlimentaire(?Diet $regimeAlimentaire): static
     {
-        $this->regimeAlimentaire = $regimeAlimentaire;
+        $this->diet = $regimeAlimentaire;
 
         return $this;
     }

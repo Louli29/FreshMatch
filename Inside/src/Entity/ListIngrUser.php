@@ -21,9 +21,9 @@ class ListIngrUser
     #[ORM\ManyToMany(targetEntity: Ingredient::class)]
     private Collection $ingredient;
 
-    #[ORM\OneToOne(inversedBy: 'listIngrUtilisateur', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'listIngrUser', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $utilisateur = null;
+    private ?User $User = null;
 
     public function __construct()
     {
@@ -59,14 +59,14 @@ class ListIngrUser
         return $this;
     }
 
-    public function getUtilisateur(): ?User
+    public function getUser(): ?User
     {
-        return $this->utilisateur;
+        return $this->User;
     }
 
-    public function setUtilisateur(User $utilisateur): static
+    public function setUser(User $User): static
     {
-        $this->utilisateur = $utilisateur;
+        $this->User = $User;
 
         return $this;
     }
