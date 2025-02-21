@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\ListIngrUtilisateur;
+use App\Entity\ListIngrUser;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -18,7 +18,7 @@ class UtilisateurType extends AbstractType
             ->add('mail')
             ->add('motDePasse')
             ->add('listIngrUtilisateur', EntityType::class, [
-                'class' => ListIngrUtilisateur::class,
+                'class' => ListIngrUser::class,
                 'choice_label' => 'id',
             ])
         ;

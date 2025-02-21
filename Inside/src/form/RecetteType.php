@@ -2,8 +2,8 @@
 
 namespace App\Form;
 
-use App\Entity\IngredientRecette;
-use App\Entity\Recette;
+use App\Entity\IngredientRecipe;
+use App\Entity\Recipe;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -21,7 +21,7 @@ class RecetteType extends AbstractType
             ->add('etape')
             ->add('nbPersonne')
             ->add('ingredientRecette', EntityType::class, [
-                'class' => IngredientRecette::class,
+                'class' => IngredientRecipe::class,
                 'choice_label' => 'id',
                 'multiple' => true,
             ])
@@ -35,7 +35,7 @@ class RecetteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Recette::class,
+            'data_class' => Recipe::class,
         ]);
     }
 }

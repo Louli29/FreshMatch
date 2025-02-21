@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\ListIngrUtilisateur;
+use App\Entity\ListIngrUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<ListIngrUtilisateur>
+ * @extends ServiceEntityRepository<ListIngrUser>
  */
 class ListIngrUtilisateurRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ListIngrUtilisateur::class);
+        parent::__construct($registry, ListIngrUser::class);
     }
 
     //    /**
-    //     * @return ListIngrUtilisateur[] Returns an array of ListIngrUtilisateur objects
+    //     * @return ListIngrUser[] Returns an array of ListIngrUser objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class ListIngrUtilisateurRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?ListIngrUtilisateur
+    //    public function findOneBySomeField($value): ?ListIngrUser
     //    {
     //        return $this->createQueryBuilder('l')
     //            ->andWhere('l.exampleField = :val')

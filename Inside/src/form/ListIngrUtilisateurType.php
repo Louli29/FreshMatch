@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Ingredient;
-use App\Entity\ListIngrUtilisateur;
+use App\Entity\ListIngrUser;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -30,7 +30,7 @@ class ListIngrUtilisateurType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ListIngrUtilisateur::class,
+            'data_class' => ListIngrUser::class,
         ]);
     }
 }

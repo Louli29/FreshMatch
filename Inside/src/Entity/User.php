@@ -29,12 +29,12 @@ class User
     private ?string $motDePasse = null;
 
     #[ORM\OneToOne(mappedBy: 'utilisateur', cascade: ['persist', 'remove'])]
-    private ?ListIngrUtilisateur $listIngrUtilisateur = null;
+    private ?ListIngrUser $listIngrUtilisateur = null;
 
     /**
-     * @var Collection<int, Recette>
+     * @var Collection<int, Recipe>
      */
-    #[ORM\OneToMany(targetEntity: Recette::class, mappedBy: 'utilisateur')]
+    #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'utilisateur')]
     private Collection $recettes;
 
 
@@ -98,12 +98,12 @@ class User
         return $this;
     }
 
-    public function getListIngrUtilisateur(): ?ListIngrUtilisateur
+    public function getListIngrUtilisateur(): ?ListIngrUser
     {
         return $this->listIngrUtilisateur;
     }
 
-    public function setListIngrUtilisateur(ListIngrUtilisateur $listIngrUtilisateur): static
+    public function setListIngrUtilisateur(ListIngrUser $listIngrUtilisateur): static
     {
         // set the owning side of the relation if necessary
         if ($listIngrUtilisateur->getUtilisateur() !== $this) {
@@ -116,14 +116,14 @@ class User
     }
 
     /**
-     * @return Collection<int, Recette>
+     * @return Collection<int, Recipe>
      */
     public function getRecettes(): Collection
     {
         return $this->recettes;
     }
 
-    public function addRecette(Recette $recette): static
+    public function addRecette(Recipe $recette): static
     {
         if (!$this->recettes->contains($recette)) {
             $this->recettes->add($recette);
@@ -133,7 +133,7 @@ class User
         return $this;
     }
 
-    public function removeRecette(Recette $recette): static
+    public function removeRecette(Recipe $recette): static
     {
         if ($this->recettes->removeElement($recette)) {
             // set the owning side to null (unless already changed)

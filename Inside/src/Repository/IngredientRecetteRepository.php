@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\IngredientRecette;
+use App\Entity\IngredientRecipe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<IngredientRecette>
+ * @extends ServiceEntityRepository<IngredientRecipe>
  */
 class IngredientRecetteRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, IngredientRecette::class);
+        parent::__construct($registry, IngredientRecipe::class);
     }
 
 //    /**
-//     * @return IngredientRecette[] Returns an array of IngredientRecette objects
+//     * @return IngredientRecipe[] Returns an array of IngredientRecipe objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -31,7 +31,7 @@ class IngredientRecetteRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?IngredientRecette
+//    public function findOneBySomeField($value): ?IngredientRecipe
 //    {
 //        return $this->createQueryBuilder('i')
 //            ->andWhere('i.exampleField = :val')
