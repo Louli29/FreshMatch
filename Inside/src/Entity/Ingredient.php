@@ -16,7 +16,7 @@ class Ingredient
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    private ?string $name = null;
 
     #[ORM\Column(enumType: TypeIngredient::class)]
     private ?TypeIngredient $typeIngredient = null;
@@ -33,14 +33,14 @@ class Ingredient
         return $this;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->nom;
+        return $this->name;
     }
 
-    public function setNom(string $nom): static
+    public function setName(string $nom): static
     {
-        $this->nom = $nom;
+        $this->name = $nom;
 
         return $this;
     }
