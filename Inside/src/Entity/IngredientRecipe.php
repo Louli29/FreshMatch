@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\IngredientRecetteRepository;
+use App\Repository\IngredientRecipeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: IngredientRecetteRepository::class)]
-class IngredientRecette
+#[ORM\Entity(repositoryClass: IngredientRecipeRepository::class)]
+class IngredientRecipe
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,9 +29,9 @@ class IngredientRecette
     private ?Ingredient $ingredient = null;
 
     /**
-     * @var Collection<int, Recette>
+     * @var Collection<int, Recipe>
      */
-    #[ORM\ManyToMany(targetEntity: Recette::class, mappedBy: 'ingredientRecette')]
+    #[ORM\ManyToMany(targetEntity: Recipe::class, mappedBy: 'ingredientRecette')]
     private Collection $recette;
 
     public function __construct()
@@ -93,14 +93,14 @@ class IngredientRecette
     }
 
     /**
-     * @return Collection<int, Recette>
+     * @return Collection<int, Recipe>
      */
     public function getRecette(): Collection
     {
         return $this->recette;
     }
 
-    public function addRecette(Recette $recette): static
+    public function addRecette(Recipe $recette): static
     {
         if (!$this->recette->contains($recette)) {
             $this->recette->add($recette);
@@ -110,7 +110,7 @@ class IngredientRecette
         return $this;
     }
 
-    public function removeRecette(Recette $recette): static
+    public function removeRecette(Recipe $recette): static
     {
         if ($this->recette->removeElement($recette)) {
             $recette->removeIngredientRecette($this);

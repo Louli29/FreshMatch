@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Enums\Allergie;;
+use App\Enums\Allergy;;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Enums\RegimeAlimentaire;
+use App\Enums\Diet;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -29,21 +29,21 @@ class User
     private ?string $motDePasse = null;
 
     #[ORM\OneToOne(mappedBy: 'utilisateur', cascade: ['persist', 'remove'])]
-    private ?ListIngrUtilisateur $listIngrUtilisateur = null;
+    private ?ListIngrUser $listIngrUtilisateur = null;
 
     /**
-     * @var Collection<int, Recette>
+     * @var Collection<int, Recipe>
      */
-    #[ORM\OneToMany(targetEntity: Recette::class, mappedBy: 'utilisateur')]
+    #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'utilisateur')]
     private Collection $recettes;
 
 
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergie::class)]
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergy::class)]
     private ?array $allergie = null;
 
-    #[ORM\Column(nullable: true, enumType: RegimeAlimentaire::class)]
-    private ?RegimeAlimentaire $regimeAlimentaire = null;
+    #[ORM\Column(nullable: true, enumType: Diet::class)]
+    private ?Diet $regimeAlimentaire = null;
 
     public function __construct()
     {
@@ -98,12 +98,12 @@ class User
         return $this;
     }
 
-    public function getListIngrUtilisateur(): ?ListIngrUtilisateur
+    public function getListIngrUtilisateur(): ?ListIngrUser
     {
         return $this->listIngrUtilisateur;
     }
 
-    public function setListIngrUtilisateur(ListIngrUtilisateur $listIngrUtilisateur): static
+    public function setListIngrUtilisateur(ListIngrUser $listIngrUtilisateur): static
     {
         // set the owning side of the relation if necessary
         if ($listIngrUtilisateur->getUtilisateur() !== $this) {
@@ -116,14 +116,14 @@ class User
     }
 
     /**
-     * @return Collection<int, Recette>
+     * @return Collection<int, Recipe>
      */
     public function getRecettes(): Collection
     {
         return $this->recettes;
     }
 
-    public function addRecette(Recette $recette): static
+    public function addRecette(Recipe $recette): static
     {
         if (!$this->recettes->contains($recette)) {
             $this->recettes->add($recette);
@@ -133,7 +133,7 @@ class User
         return $this;
     }
 
-    public function removeRecette(Recette $recette): static
+    public function removeRecette(Recipe $recette): static
     {
         if ($this->recettes->removeElement($recette)) {
             // set the owning side to null (unless already changed)
@@ -146,7 +146,7 @@ class User
     }
 
     /**
-     * @return Allergie[]|null
+     * @return Allergy[]|null
      */
     public function getAllergie(): ?array
     {
@@ -160,12 +160,12 @@ class User
         return $this;
     }
 
-    public function getRegimeAlimentaire(): ?RegimeAlimentaire
+    public function getRegimeAlimentaire(): ?Diet
     {
         return $this->regimeAlimentaire;
     }
 
-    public function setRegimeAlimentaire(?RegimeAlimentaire $regimeAlimentaire): static
+    public function setRegimeAlimentaire(?Diet $regimeAlimentaire): static
     {
         $this->regimeAlimentaire = $regimeAlimentaire;
 

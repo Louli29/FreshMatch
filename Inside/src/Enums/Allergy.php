@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace App\Enums;
 
-enum Allergie : string {
+enum Allergy : string {
 
     case GLUTEN = 'vegetarien';
     case LACTOSE = 'vegan';

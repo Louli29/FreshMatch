@@ -2,16 +2,16 @@
 
 namespace App\Entity;
 
-use  App\Enums\Allergie;
-use App\Repository\RecetteRepository;
+use  App\Enums\Allergy;
+use App\Repository\RecipeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Enums\RegimeAlimentaire;
+use App\Enums\Diet;
 
-#[ORM\Entity(repositoryClass: RecetteRepository::class)]
-class Recette
+#[ORM\Entity(repositoryClass: RecipeRepository::class)]
+class Recipe
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -34,35 +34,20 @@ class Recette
     private ?int $nbPersonne = null;
 
     /**
-     * @var Collection<int, IngredientRecette>
+     * @var Collection<int, IngredientRecipe>
      */
-    #[ORM\ManyToMany(targetEntity: IngredientRecette::class, inversedBy: 'recette')]
+    #[ORM\ManyToMany(targetEntity: IngredientRecipe::class, inversedBy: 'recette')]
     private Collection $ingredientRecette;
 
     #[ORM\ManyToOne(inversedBy: 'recettes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $utilisateur = null;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergie::class)]
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergy::class)]
     private ?array $allergies = null;
 
-    #[ORM\Column(nullable: true, enumType: RegimeAlimentaire::class)]
-    private ?RegimeAlimentaire $regimeAlimentaire = null;
-
-    #[ORM\Column(type: 'string')]
-    private string $imageLink;
-
-    public function getImageLink(): string
-    {
-        return $this->imageLink;
-    }
-
-    public function setImageLink(string $imageLink): self
-    {
-        $this->imageLink = $imageLink;
-
-        return $this;
-    }
+    #[ORM\Column(nullable: true, enumType: Diet::class)]
+    private ?Diet $regimeAlimentaire = null;
 
     public function __construct()
     {
@@ -142,14 +127,14 @@ class Recette
     }
 
     /**
-     * @return Collection<int, IngredientRecette>
+     * @return Collection<int, IngredientRecipe>
      */
     public function getIngredientRecette(): Collection
     {
         return $this->ingredientRecette;
     }
 
-    public function addIngredientRecette(IngredientRecette $ingredientRecette): static
+    public function addIngredientRecette(IngredientRecipe $ingredientRecette): static
     {
         if (!$this->ingredientRecette->contains($ingredientRecette)) {
             $this->ingredientRecette->add($ingredientRecette);
@@ -158,7 +143,7 @@ class Recette
         return $this;
     }
 
-    public function removeIngredientRecette(IngredientRecette $ingredientRecette): static
+    public function removeIngredientRecette(IngredientRecipe $ingredientRecette): static
     {
         $this->ingredientRecette->removeElement($ingredientRecette);
 
@@ -178,7 +163,7 @@ class Recette
     }
 
     /**
-     * @return Allergie[]|null
+     * @return Allergy[]|null
      */
     public function getAllergies(): ?array
     {
@@ -192,12 +177,12 @@ class Recette
         return $this;
     }
 
-    public function getRegimeAlimentaire(): ?RegimeAlimentaire
+    public function getRegimeAlimentaire(): ?Diet
     {
         return $this->regimeAlimentaire;
     }
 
-    public function setRegimeAlimentaire(?RegimeAlimentaire $regimeAlimentaire): static
+    public function setRegimeAlimentaire(?Diet $regimeAlimentaire): static
     {
         $this->regimeAlimentaire = $regimeAlimentaire;
 

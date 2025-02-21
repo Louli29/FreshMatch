@@ -2,39 +2,39 @@
 
 namespace App\Repository;
 
-use App\Entity\Recette;
+use App\Entity\ListIngrUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Recette>
+ * @extends ServiceEntityRepository<ListIngrUser>
  */
-class RecetteRepository extends ServiceEntityRepository
+class ListIngrUserRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Recette::class);
+        parent::__construct($registry, ListIngrUser::class);
     }
 
     //    /**
-    //     * @return Recette[] Returns an array of Recette objects
+    //     * @return ListIngrUser[] Returns an array of ListIngrUser objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
+    //        return $this->createQueryBuilder('l')
+    //            ->andWhere('l.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
+    //            ->orderBy('l.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Recette
+    //    public function findOneBySomeField($value): ?ListIngrUser
     //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
+    //        return $this->createQueryBuilder('l')
+    //            ->andWhere('l.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()
