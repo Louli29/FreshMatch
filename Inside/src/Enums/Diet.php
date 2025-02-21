@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Enums;
 
-enum RegimeAlimentaire : string {
+enum Diet : string {
 
     case VEGETARIEN = 'vegetarien';
     case VEGAN = 'vegan';

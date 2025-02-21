@@ -2,23 +2,26 @@
 
 namespace App\Form;
 
-use App\Entity\ListIngrUtilisateur;
+use App\Entity\Ingredient;
+use App\Entity\ListIngrUser;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UtilisateurType extends AbstractType
+class ListIngrUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom')
-            ->add('mail')
-            ->add('motDePasse')
-            ->add('listIngrUtilisateur', EntityType::class, [
-                'class' => ListIngrUtilisateur::class,
+            ->add('ingredient', EntityType::class, [
+                'class' => Ingredient::class,
+                'choice_label' => 'id',
+                'multiple' => true,
+            ])
+            ->add('utilisateur', EntityType::class, [
+                'class' => User::class,
                 'choice_label' => 'id',
             ])
         ;
@@ -27,7 +30,7 @@ class UtilisateurType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => ListIngrUser::class,
         ]);
     }
 }

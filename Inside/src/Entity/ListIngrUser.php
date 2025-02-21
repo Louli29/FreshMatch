@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\ListIngrUtilisateurRepository;
+use App\Repository\ListIngrUserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ListIngrUtilisateurRepository::class)]
-class ListIngrUtilisateur
+#[ORM\Entity(repositoryClass: ListIngrUserRepository::class)]
+class ListIngrUser
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

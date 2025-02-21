@@ -2,14 +2,14 @@
 
 namespace App\Form;
 
-use App\Entity\ListIngrUtilisateur;
+use App\Entity\ListIngrUser;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UtilisateurType extends AbstractType
+class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -18,7 +18,7 @@ class UtilisateurType extends AbstractType
             ->add('mail')
             ->add('motDePasse')
             ->add('listIngrUtilisateur', EntityType::class, [
-                'class' => ListIngrUtilisateur::class,
+                'class' => ListIngrUser::class,
                 'choice_label' => 'id',
             ])
         ;
