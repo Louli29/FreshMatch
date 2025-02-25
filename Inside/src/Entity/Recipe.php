@@ -39,10 +39,6 @@ class Recipe
     #[ORM\ManyToMany(targetEntity: IngredientRecipe::class, inversedBy: 'Recipe')]
     private Collection $ingredientRecipe;
 
-    #[ORM\ManyToOne(inversedBy: 'Recipes')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
     #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergy::class)]
     private ?array $allergys = null;
 
@@ -51,6 +47,9 @@ class Recipe
 
     #[ORM\Column(type: 'string')]
     private string $imageLink;
+
+    #[ORM\ManyToOne(inversedBy: 'recettes')]
+    private ?User $user = null;
 
     public function getImageLink(): string
     {
@@ -165,17 +164,7 @@ class Recipe
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
+   
 
     /**
      * @return Allergy[]|null
@@ -200,6 +189,18 @@ class Recipe
     public function setDiet(?Diet $diet): static
     {
         $this->diet = $diet;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
