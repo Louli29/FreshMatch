@@ -1,11 +1,50 @@
-{% extends 'Main.html.twig' %}
+{# templates/user/new.html.twig #}
+{% extends 'base.html.twig' %}
 
-{% block title %}New User{% endblock %}
+{% block title %}Nouvel Utilisateur{% endblock %}
 
-{% block main %}
-    <h1>Create new User</h1>
+{% block body %}
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1 class="text-center mb-4">Rejoindre la communauté FreshMatch</h1>
 
-    {{ include('user/_form.html.twig') }}
+                <h1 class="text-center mb-4">S'inscrire</h1>
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+                {{ form_start(form) }}
+
+                    {# Champ Nom #}
+                    <div class="mb-3">
+                        {{ form_row(form.name)}}
+                    </div>
+
+                    {# Champ E-mail #}
+                    <div class="mb-3">
+                        {{ form_row(form.email)}}
+                    </div>
+
+                    {# Champ Mot de passe #}
+                    <div class="mb-3">
+                        {{ form_row(form.password)}}
+                    </div>
+
+                    {# Champ Régime alimentaire #}
+                    <div class="mb-3">
+                        {{ form_row(form.diet)}}
+                    </div>
+
+                    {# Champ Allergies #}
+                    <div class="mb-3">
+                        {{ form_row(form.allergy)}}
+                    </div>
+
+                    {# Bouton de soumission #}
+                    <div class="mb-3 text-center">
+                        <button type="submit" class="btn btn-warning btn-sm">S’inscrire</button>
+                    </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -146,10 +146,11 @@ table {
     background: linear-gradient(to bottom, #095227, #4B8947);
 }
 
-.second-article img{
+.second-article td img{
     background: linear-gradient(to bottom, #095227, #4B8947);
     width: 100px; 
     height: 100px;
+    padding: 10px;
 
 }
 
