@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enums\Season;
 use App\Enums\TypeIngredient;
 use App\Repository\IngredientRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,6 +21,9 @@ class Ingredient
 
     #[ORM\Column(enumType: TypeIngredient::class)]
     private ?TypeIngredient $typeIngredient = null;
+
+    #[ORM\Column(enumType: Season::class)]
+    private ?Season $season = null;
 
     public function getId(): ?int
     {
@@ -56,4 +60,17 @@ class Ingredient
 
         return $this;
     }
+
+    public function getSeason(): ?Season
+    {
+        return $this->season;
+    }
+
+    public function setSeason(Season $season): static
+    {
+        $this->season = $season;
+
+        return $this;
+    }
+
 }
