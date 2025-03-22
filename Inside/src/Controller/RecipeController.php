@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Recipe;
-use App\Form\RecipeType;
+use App\form\RecipeType;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
