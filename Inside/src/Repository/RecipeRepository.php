@@ -16,6 +16,23 @@ class RecipeRepository extends ServiceEntityRepository
         parent::__construct($registry, Recipe::class);
     }
 
+    public function findSeasonRecipes(array $ingredientsDeSaison): array
+    {
+        return $this->createQueryBuilder('r')
+        // Jointure avec IngredientRecipe
+        ->innerJoin('r.ingredientRecipe', 'ir')
+        // Jointure avec Ingredient
+        ->innerJoin('ir.ingredient', 'i')
+        // Filtrer par les ingrédients de saison
+        ->andWhere('i.id IN (:ingredients)')
+        ->setParameter('ingredients', array_map(function($ingredient) {
+            return $ingredient->getId();
+        }, $ingredientsDeSaison))
+        // Retourner les résultats sous forme de tableau d'objets Recipe
+        ->getQuery()
+        ->getResult();
+    }
+
     //    /**
     //     * @return Recipe[] Returns an array of Recipe objects
     //     */

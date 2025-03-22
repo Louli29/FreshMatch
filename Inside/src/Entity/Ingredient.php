@@ -22,7 +22,7 @@ class Ingredient
     #[ORM\Column(enumType: TypeIngredient::class)]
     private ?TypeIngredient $typeIngredient = null;
 
-    #[ORM\Column(enumType: Season::class)]
+    #[ORM\Column(enumType: Season::class, nullable:true)]
     private ?Season $season = null;
 
     public function getId(): ?int

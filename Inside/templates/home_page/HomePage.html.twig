@@ -29,6 +29,36 @@
         </table>
     </article>
 
+    <article class="second-article">
+    <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Temps de préparation</th>
+                <th>Nom de la recette</th>
+                <th>Description</th>
+                <th>step</th>
+                <th>nb_person</th>
+                <th>allergys</th>
+                <th>Diet</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for recipe in recipes %}
+                <tr>
+                    <td>{{ recipe.id }}</td>
+                    <td>{{ recipe.time }} minutes</td>
+                    <td>{{ recipe.name }}</td>
+                    <td>{{ recipe.description }}</td>
+                    <td>{{ recipe.step}}</td>
+                    <td>{{ recipe.nbPerson }}</td>
+                    <td>{{ recipe.allergys is not null ? recipe.allergys | join(', ') : 'Aucune allergie' }}</td>
+                    <td>{{ recipe.diet }}</td>
+                </tr>
+            {% endfor %}
+    </article>
+
     <article class="tirth-acticle">
         <h4 class="title2"> Nos recettes de saison en 
         {% for saison,dates in saisons %}
