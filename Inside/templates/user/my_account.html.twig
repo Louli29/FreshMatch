@@ -1,0 +1,18 @@
+{% extends 'Main.html.twig' %}
+{% block title %}Mon compte{% endblock %}
+{% block main %}
+  <h1>Mon compte</h1>
+  hello
+  <a href="{{ path('app_recipe_new') }}">
+    <button >Créer une recette</button>
+  </a>
+
+  {# Inclusion du bloc "showLess" #}
+  {% include 'user/show_less.html.twig' %}
+
+
+
+
+
+  {# Tu peux ajouter d'autres blocs ici #}
+{% endblock %}

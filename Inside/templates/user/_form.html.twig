@@ -2,7 +2,6 @@
     <div class="container">
     
         <div class="form-container">
-            <h1>S'inscrire</h1>
 
             {{ form_start(form) }}
                 <div class="mb-3">
@@ -25,11 +24,11 @@
                     {{ form_row(form.allergy) }}
                 </div>
 
-                <div class="mb-3 text-center">
-                    <button type="submit" class="btn btn-success">
-                        {{ button_label|default("S'inscrire") }}
-                    </button>
-                </div>
+            <div class="mb-3 text-center">
+                <button type="submit" class="btn btn-success">
+                    {{ button_label|default("S'inscrire") }}
+                </button>
+            </div>
             {{ form_end(form) }}
         </div>
     </div>

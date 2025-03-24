@@ -13,13 +13,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
+
+
+
 #[Route('/user')]
 final class UserController extends AbstractController
 {
-    #[Route(name: 'app_user_index', methods: ['GET'])]
+    #[Route(name: 'app_user', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
-        return $this->render('home_page/HomePage.html.twig', [
+        return $this->render('user/my_account.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
     }
@@ -51,9 +54,18 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_user_account', methods: ['GET'])]
+    public function account(User $user): Response
+    {
+        //var_dump($user);
+        return $this->render('user/my_account.html.twig', [
+            'user' => $user,
+        ]);
+    }
+    #[Route('/show/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
+        //var_dump($user);
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
@@ -68,7 +80,7 @@ final class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('home_page', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/edit.html.twig', [
@@ -85,6 +97,6 @@ final class UserController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('home_page', [], Response::HTTP_SEE_OTHER);
     }
 }
