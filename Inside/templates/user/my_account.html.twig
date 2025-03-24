@@ -1,18 +1,29 @@
-{% extends 'Main.html.twig' %}
-{% block title %}Mon compte{% endblock %}
-{% block main %}
-  <h1>Mon compte</h1>
-  hello
-  <a href="{{ path('app_recipe_new') }}">
-    <button >Créer une recette</button>
-  </a>
-
-  {# Inclusion du bloc "showLess" #}
+{% extends 'Main.html.twig' %} 
+{% block title %}Mon compte{% endblock %} 
+{% block main %} 
+  <h1 class="text-center mb-4">Mon compte</h1>
+  
   {% include 'user/show_less.html.twig' %}
 
+  <div class="text-center mt-4">
 
+    <div class="mb-3">
+      <a href="{{ path('app_recipe_new') }}">
+        <button class="btn btn-success">Créer une recette</button>
+      </a>
+    </div>
 
+    <div class="mb-3">
+      <a href="{{ path('app_recipe_index') }}">
+        <button class="btn btn-success">Voir mes recettes</button>
+      </a>
+    </div>
 
-
-  {# Tu peux ajouter d'autres blocs ici #}
+    <div class="mb-3">
+      <a href="{{ path('app_user_delete', {'id': user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ?');">
+        <button class="btn btn-danger">Supprimer mon compte</button>
+      </a>
+    </div>
+  </div>
+  
 {% endblock %}
