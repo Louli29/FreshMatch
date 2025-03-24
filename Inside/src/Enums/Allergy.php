@@ -8,6 +8,11 @@ enum Allergy : string {
     case LACTOSE = 'Lactose';
     case FRUIT_A_COQUE = 'Fruit à coque';
     case FRUIT_DE_MER = 'Fruit de mer';
+
+
+
 }
+
+
 
 ?>

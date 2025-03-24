@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\IngredientRecipe;
 use App\Entity\Recipe;
 use App\Entity\User;
+use Doctrine\DBAL\Types\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,6 +16,7 @@ class RecipeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+
             ->add('time')
             ->add('name')
             ->add('description')
@@ -22,15 +24,14 @@ class RecipeType extends AbstractType
             ->add('nbPerson')
             ->add('allergys')
             ->add('diet')
-            ->add('imageLink')
+            ->add('imageLink'
+
+            )
             ->add('ingredientRecipe', EntityType::class, [
                 'class' => IngredientRecipe::class,
                 'choice_label' => 'id',
                 'multiple' => true,
-            ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
+                'required' => false,
             ])
         ;
     }

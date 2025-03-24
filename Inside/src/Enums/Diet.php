@@ -7,6 +7,11 @@ enum Diet : string {
 
     case VEGETARIEN = 'Végétarien';
     case VEGAN = 'Vegan';
+
+
+
+
+
 }
 
 ?>

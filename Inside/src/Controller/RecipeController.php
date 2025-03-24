@@ -11,9 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+use Symfony\Bundle\SecurityBundle\Security;
+
+
 #[Route('/recipe')]
 final class RecipeController extends AbstractController
 {
+    public function __construct(private Security $security) {}
+
     #[Route(name: 'app_recipe_index', methods: ['GET'])]
     public function index(RecipeRepository $recipeRepository): Response
     {
@@ -23,9 +28,11 @@ final class RecipeController extends AbstractController
     }
 
     #[Route('/new', name: 'app_recipe_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,Security $security): Response
     {
+        $user = $security->getUser();
         $recipe = new Recipe();
+        $recipe->setUser($user);
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
 
@@ -33,12 +40,23 @@ final class RecipeController extends AbstractController
             $entityManager->persist($recipe);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_recipe_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_account', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('recipe/new.html.twig', [
             'recipe' => $recipe,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/my_recipe', name: 'app_my_recipe_index', methods: ['GET'])]
+    public function myRecipe(Security $security, RecipeRepository $repo): Response
+    {
+        $user = $security->getUser();
+        $recipes = $repo->findBy(['user' => $user]);
+
+        return $this->render('recipe/index.html.twig', [
+            'recipes' => $recipes,
         ]);
     }
 
