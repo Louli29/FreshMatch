@@ -32,12 +32,19 @@
                 <td>{{ recipe.nbPerson }}</td>
             </tr>
             <tr>
-                <th>Allergys</th>
-                <td>{{ recipe.allergys }}</td>
+                <td>{% if recipe.allergys %}
+                    {{ recipe.allergys|map(a => a.value)|join(', ') }}
+                    {% else %}
+                    Aucune allergie définie</td>
+                {% endif %}
             </tr>
             <tr>
-                <th>Diet</th>
-                <td>{{ recipe.diet }}</td>
+                <td> {% if recipe.diet %}
+                        {{ recipe.diet.value }}
+                    {% else %}
+                        Aucun régime alimentaire définie
+                    {% endif %}</td>
+
             </tr>
             <tr>
                 <th>ImageLink</th>
