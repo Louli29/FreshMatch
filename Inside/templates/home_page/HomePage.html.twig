@@ -29,95 +29,48 @@
         </table>
     </article>
 
-    <article class="second-article">
-    <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Temps de préparation</th>
-                <th>Nom de la recette</th>
-                <th>Description</th>
-                <th>step</th>
-                <th>nb_person</th>
-                <th>allergys</th>
-                <th>Diet</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            {% for recipe in recipes %}
-                <tr>
-                    <td>{{ recipe.id }}</td>
-                    <td>{{ recipe.time }} minutes</td>
-                    <td>{{ recipe.name }}</td>
-                    <td>{{ recipe.description }}</td>
-                    <td>{{ recipe.step}}</td>
-                    <td>{{ recipe.nbPerson }}</td>
-                    <td>{{ recipe.allergys is not null ? recipe.allergys | join(', ') : 'Aucune allergie' }}</td>
-                    <td>{{ recipe.diet }}</td>
-                </tr>
-            {% endfor %}
-    </article>
-
     <article class="tirth-acticle">
-        <h4 class="title2"> Nos recettes de saison en 
-        {% for saison,dates in saisons %}
-            {% if dateActuelle >= dates.start and dateActuelle <= dates.end %}
-                {% if saison == 'spring' %}
-                    Printemps  </h4>
-                    <table>
-                        <tr>
-                            <td><a href="#"><img src="pictures/GrilledGoatCheeseSalad.png" alt ="GrilledGoatCheeseSalad img"> </a> </td>
-                            <td><a href="#"><img src="pictures/ChickenRisottoWeight.jpg" alt ="ChickenRisottoWeight img"></a> </td>
-                            <td><a ><img src="pictures/StrawberryTart.png" alt ="StrawberryTart img"></a></td>
-                        </tr>                        
-                    </table>
-                {% endif %}
-                {% if saison == 'summer' %}
-                 Eté  </h4>
-                <table>
-                    <tr>
-                        <td><a href="#"><img src="pictures/MelonFetaMintSalad.webp" alt ="MelonFetaMintSalad img"></a></td>
-                        <td><a href="#"><img src="pictures/FishCeviche.png" alt ="FishCeviche img"></a></td>
-                        <td><a href="#"><img src="pictures/PastaWithPesto.png" alt ="PastaWithPesto img"></a></td>
-                    </tr>
-                    
-                </table>
-                {% endif %}
-                {% if saison == 'autumn' %}
-                 Automne  </h4>
-                <table>
-                    <tr>
-                        <td><a href="#"><img src="pictures/PumpkinSoup.jpeg" alt ="text alternatif"></a></td>
-                        <td><a href="#"><img src="pictures/MeatStewWithRootVegetables.jpg" alt ="text alternatif"></a></td>
-                        <td><a href="#"><img src="pictures/AppleAndCinnamonPie.JPG" alt ="text alternatif"></a></td>
-                    </tr>
-                </table>
-                {% endif %}
-                {% if saison == 'winter' %}
-                 Hiver  </h4>
-                <table>
-                    <tr>
-                        <td><a href="#"><img src="pictures/ChiliConCarne.jpg" alt ="text alternatif"></a></td>
-                        <td><a href="#"><img src="pictures/DauphinoiseGratin.jpg" alt ="text alternatif"></a></td>
-                        <td><a href="#"><img src="pictures/ChocolateAndOrangeCake.png" alt ="text alternatif"></a></td>
-                    </tr>
-                </table>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
+    {% if saison == "SPRING" %}
+        <h4 class="title"> Nos recettes de Printemps !</h4>
+    {% endif %}
+    {% if saison == "SUMMER" %}
+        <h4 class="title"> Nos recettes d'Eté !</h4>
+    {% endif %}
+    {% if saison == "AUTUMN" %}
+        <h4 class="title"> Nos recettes d'Automne !</h4>
+    {% endif %}
+    {% if saison == "WINTER" %}
+        <h4 class="title"> Nos recettes d'Hiver !</h4>
+    {% endif %}
+        <table>
+            <tr>
+                {% for recipe in recipes %}
+                  <td> <a href="path('')" class="thirthArticleLink"><img src="/pictures/{{recipe.imageLink}}" alt ="{{ recipe.imageLink }} picture " title="Cliquez pour voir la recette !"> </a></td>
+                {% endfor %}
+            </tr>
+        </table>
     </article>
+
 
 <style>
 .tirth-acticle{
-  background: linear-gradient(to bottom, #095227, #4B8947);
+    background-color: #F9EEE0;
+    padding-bottom:50px;
+}
+.thirthArticleLink{
+        padding: 20px;
+}
+.thirthArticleLink img {
+    transition: transform 0.3s ease-in-out;
+    background: linear-gradient(to bottom, #095227, #4B8947);
+    width: 250px; 
+    height: 250px;
 }
 
-.tirth-acticle img{
-  background: linear-gradient(to bottom, #095227, #4B8947);
-  width: 100px; 
-  height: 100px;
-
+.thirthArticleLink img:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
 }
+
 </style>
 {% endblock %}

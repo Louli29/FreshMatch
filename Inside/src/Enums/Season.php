@@ -4,10 +4,10 @@ namespace App\Enums;
 
 enum Season: string
 {
-    case SPRING = 'spring';
-    case SUMMER = 'summer';
-    case AUTUMN = 'autumn';
-    case WINTER = 'winter';
+    case SPRING = 'SPRING';
+    case SUMMER = 'SUMMER';
+    case AUTUMN = 'AUTUMN';
+    case WINTER = 'WINTER';
 
     public function getDates(int $year): array // La méthode récupère la date associée au saison en fonction du $this qui est l'une des 4 saisons
     { 

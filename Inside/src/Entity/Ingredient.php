@@ -22,8 +22,8 @@ class Ingredient
     #[ORM\Column(enumType: TypeIngredient::class)]
     private ?TypeIngredient $typeIngredient = null;
 
-    #[ORM\Column(enumType: Season::class, nullable:true)]
-    private ?Season $season = null;
+    #[ORM\Column(type: 'json', nullable:true, enumType: Season::class)]
+    private array $season = [];
 
     public function getId(): ?int
     {
@@ -61,15 +61,14 @@ class Ingredient
         return $this;
     }
 
-    public function getSeason(): ?Season
+    public function getSeason(): ?array
     {
         return $this->season;
     }
 
-    public function setSeason(Season $season): static
+    public function setSeason(array $season): self
     {
         $this->season = $season;
-
         return $this;
     }
 

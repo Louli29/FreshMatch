@@ -15,13 +15,13 @@ class IngredientRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ingredient::class);
     }
-
-    private function findSeasonIngredient($saison):array{
+    public function findSeasonIngredients($saison)
+    {
         return $this->createQueryBuilder('i')
-        ->andWhere('i.season = :season')
-        ->setParameter('season', $saison)
-        ->getQuery()
-        ->getResult();
+            ->where('i.season LIKE :saison')
+            ->setParameter('saison', '%'.$saison.'%' )
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**
