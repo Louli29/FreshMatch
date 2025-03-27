@@ -18,12 +18,9 @@ class ListIngrUserType extends AbstractType
         $builder
             ->add('ingredient', EntityType::class, [
                 'class' => Ingredient::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'multiple' => true,
-            ])
-            ->add('utilisateur', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
+                'attr' => ['class' => 'ingredient-autocomplete'],
             ])
         ;
     }

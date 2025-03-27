@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\ListIngrUser;
 use App\Entity\User;
+use App\form\ListIngrUserType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -55,13 +57,33 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_account', methods: ['GET'])]
-    public function account(User $user): Response
+    public function account(User $user, Request $request, EntityManagerInterface $em): Response
     {
-        //var_dump($user);
+
+        $listIngrUser = $user->getListIngredient();
+        if (!$listIngrUser) {
+            $listIngrUser = new ListIngrUser();
+            $listIngrUser->setUser($user);
+        }
+
+        $form = $this->createForm(ListIngrUserType::class, $listIngrUser);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($listIngrUser);
+            $em->flush();
+
+            $this->addFlash('success', 'Ingrédients ajoutés à ton placard');
+            return $this->redirectToRoute('app_ingr_user');
+        }
+
         return $this->render('user/my_account.html.twig', [
             'user' => $user,
+            'form' => $form->createView(),
+            'listIngrUser' => $listIngrUser,
         ]);
     }
+
     #[Route('/show/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {

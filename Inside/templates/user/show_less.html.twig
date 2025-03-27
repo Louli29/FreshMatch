@@ -66,30 +66,9 @@
     
         <div class="col-md-6">
             <h2>Mon placard</h2>
+
             <div class="form-container">
-                <table class="table table-hover no-border-table">
-                    <tbody>
-                        <tr>
-                            <th scope="row">Article 1</th>
-                            <td>Exemple d'article</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Article 2</th>
-                            <td>Exemple d'article</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Article 3</th>
-                            <td>Exemple d'article</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Article 4</th>
-                            <td>Exemple d'article</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="text-center mt-3">
-                    <a href="{{ path('app_user_show', { 'id': user.id }) }}" class="btn btn-success">+ Ajouter</a>
-                </div>
+                {% include './list_ingr_user/index.html.twig' %}
             </div>
         </div>
     </div>
