@@ -35,7 +35,7 @@ final class HomePageController extends AbstractController
         $ingredientsDeSaison = $this->ingredientRepository->findSeasonIngredients($saisonCourant);
         $seasonRecipes=$this->recipeRepository->findSeasonRecipes($ingredientsDeSaison);
         return $this->render('home_page/HomePage.html.twig', [
-            'saison'=>$saisonCourant, 'recipes' => $seasonRecipes
+            'saison'=>$saisonCourant, 'recipes' => $seasonRecipes 
         ]);
     }
 }
