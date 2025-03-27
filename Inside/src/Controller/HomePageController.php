@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\IngredientRecipe;
 use App\Enums\Season;
 use App\Repository\IngredientRepository;
 use App\Repository\RecipeRepository;
