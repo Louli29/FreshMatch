@@ -18,3 +18,53 @@
     </ul>
 </div>
 {% endblock %}
+
+<!--    <article class="tirth-acticle">
+        <h4 class="title2"> Nos recettes de saison en 
+        {% for saison,dates in saisons %}
+            {% if dateActuelle >= dates.start and dateActuelle <= dates.end %}
+                {% if saison == 'spring' %}
+                    Printemps  </h4>
+                    <table>
+                        <tr>
+                            <td><a href="#"><img src="pictures/GrilledGoatCheeseSalad.png" alt ="GrilledGoatCheeseSalad img"> </a> </td>
+                            <td><a href="#"><img src="pictures/ChickenRisottoWeight.jpg" alt ="ChickenRisottoWeight img"></a> </td>
+                            <td><a ><img src="pictures/StrawberryTart.png" alt ="StrawberryTart img"></a></td>
+                        </tr>                        
+                    </table>
+                {% endif %}
+                {% if saison == 'summer' %}
+                 Eté  </h4>
+                <table>
+                    <tr>
+                        <td><a href="#"><img src="pictures/MelonFetaMintSalad.webp" alt ="MelonFetaMintSalad img"></a></td>
+                        <td><a href="#"><img src="pictures/FishCeviche.png" alt ="FishCeviche img"></a></td>
+                        <td><a href="#"><img src="pictures/PastaWithPesto.png" alt ="PastaWithPesto img"></a></td>
+                    </tr>
+                    
+                </table>
+                {% endif %}
+                {% if saison == 'autumn' %}
+                 Automne  </h4>
+                <table>
+                    <tr>
+                        <td><a href="#"><img src="pictures/PumpkinSoup.jpeg" alt ="text alternatif"></a></td>
+                        <td><a href="#"><img src="pictures/MeatStewWithRootVegetables.jpg" alt ="text alternatif"></a></td>
+                        <td><a href="#"><img src="pictures/AppleAndCinnamonPie.JPG" alt ="text alternatif"></a></td>
+                    </tr>
+                </table>
+                {% endif %}
+                {% if saison == 'winter' %}
+                 Hiver  </h4>
+                <table>
+                    <tr>
+                        <td><a href="#"><img src="pictures/ChiliConCarne.jpg" alt ="text alternatif"></a></td>
+                        <td><a href="#"><img src="pictures/DauphinoiseGratin.jpg" alt ="text alternatif"></a></td>
+                        <td><a href="#"><img src="pictures/ChocolateAndOrangeCake.png" alt ="text alternatif"></a></td>
+                    </tr>
+                </table>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </article>-->
+

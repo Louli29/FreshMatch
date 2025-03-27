@@ -28,4 +28,59 @@
             </tr>
         </table>
     </article>
+
+    <article class="tirth-acticle">
+    {% if saison == "SPRING" %}
+        <h4 class="title"> Nos recettes de Printemps !</h4>
+    {% endif %}
+    {% if saison == "SUMMER" %}
+        <h4 class="title"> Nos recettes d'Eté !</h4>
+    {% endif %}
+    {% if saison == "AUTUMN" %}
+        <h4 class="title"> Nos recettes d'Automne !</h4>
+    {% endif %}
+    {% if saison == "WINTER" %}
+        <h4 class="title"> Nos recettes d'Hiver !</h4>
+    {% endif %}
+        <table>
+            <tr>
+                {% for recipe in recipes %}
+                  <td class="recipeTitle"> {{recipe.name}}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for recipe in recipes %}
+                  <td> <a href="path('')" class="thirthArticleLink"><img src="/pictures/{{recipe.imageLink}}" alt ="{{ recipe.imageLink }} picture " title="Cliquez pour voir la recette !"> </a></td>
+                {% endfor %}
+            </tr>
+            
+        </table>
+    </article>
+
+
+<style>
+.tirth-acticle{
+    background-color: #F9EEE0;
+    padding-bottom:50px;
+}
+
+.thirthArticleLink img {
+    transition: transform 0.3s ease-in-out;
+    width: 200px; 
+    height: 200px;
+    padding: 20px;
+}
+
+.thirthArticleLink img:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+.recipeTitle {
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    color: #CDA37B;
+}
+
+</style>
 {% endblock %}
