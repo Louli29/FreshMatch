@@ -50,7 +50,9 @@ class Recipe
     private ?Diet $diet = null;
 
     #[ORM\Column(type: 'string')]
-    private string $imageLink;
+    private ?string $imageLink = '';
+    #[ORM\ManyToOne(inversedBy: 'recettes')]
+    private ?User $user = null;
 
     public function getImageLink(): string
     {
@@ -165,17 +167,7 @@ class Recipe
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
+   
 
     /**
      * @return Allergy[]|null
@@ -200,6 +192,18 @@ class Recipe
     public function setDiet(?Diet $diet): static
     {
         $this->diet = $diet;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

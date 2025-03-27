@@ -1,0 +1,10 @@
+{% extends 'Main.html.twig' %}
+
+{% block title %}S'inscrire{% endblock %}
+
+{% block main %}
+    <h1>S'inscrire</h1>
+
+    {{ include('user/_form.html.twig', {'button_label': "S'inscrire"}) }}
+
+{% endblock %}

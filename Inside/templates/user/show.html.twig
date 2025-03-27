@@ -1,0 +1,45 @@
+{% extends 'Main.html.twig' %}
+{% block title %}User{% endblock %}
+
+{% block main %}
+    <h1>User</h1>
+
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ user.password }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ user.name }}</td>
+            </tr>
+            <tr>
+                <td> {% if user.diet %}
+                        {{ user.diet.value }}
+                    {% else %}
+                        Aucun régime alimentaire définie
+                    {% endif %}</td>
+
+            </tr>
+            <tr>
+                <td>{% if user.allergy %}
+                    {{ user.allergy|map(a => a.value)|join(', ') }}
+                    {% else %}
+                    Aucune allergie définie</td>
+                    {% endif %}
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_user_account', { 'id': user.id }) }}">Retourner sur mon compte</a>
+
+    <a href="{{ path('app_user_edit', {'id': user.id}) }}">modifier</a>
+
+    {{ include('user/_delete_form.html.twig') }}
+{% endblock %}

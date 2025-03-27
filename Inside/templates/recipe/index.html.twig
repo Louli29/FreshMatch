@@ -1,0 +1,71 @@
+{% extends 'Main.html.twig' %}
+
+{% block title %}Recipe index{% endblock %}
+
+{% block main %}
+    <h1>Recipe index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Time</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Step</th>
+            <th>NbPerson</th>
+            <th>Allergys</th>
+            <th>Diet</th>
+            <th>ImageLink</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for recipe in recipes %}
+            <tr>
+                <td>{{ recipe.id }}</td>
+                <td>{{ recipe.time }}</td>
+                <td>{{ recipe.name }}</td>
+                <td>{{ recipe.description }}</td>
+                <td>{{ recipe.step }}</td>
+                <td>{{ recipe.nbPerson }}</td>
+
+                <td>
+                    {% if recipe.allergys is not empty %}
+                        {{ recipe.allergys|map(a => a.value)|join(', ') }}
+                    {% else %}
+                        Aucune allergie définie
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if recipe.diet %}
+                        {{ recipe.diet.value }}
+                    {% else %}
+                        Aucun régime alimentaire défini
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if recipe.imageLink != '' %}
+                        {{ recipe.imageLink }}
+                    {% else %}
+                        Aucune image définie
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}">show</a>
+                    <a href="{{ path('app_recipe_edit', {'id': recipe.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_recipe_new') }}">Create new</a>
+{% endblock %}

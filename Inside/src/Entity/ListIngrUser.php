@@ -21,9 +21,10 @@ class ListIngrUser
     #[ORM\ManyToMany(targetEntity: Ingredient::class)]
     private Collection $ingredient;
 
-    #[ORM\OneToOne(inversedBy: 'listIngrUser', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $User = null;
+    #[ORM\OneToOne(mappedBy: 'listIngredient', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
+    
 
     public function __construct()
     {
@@ -61,13 +62,24 @@ class ListIngrUser
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(User $User): static
+    public function setUser(?User $user): static
     {
-        $this->User = $User;
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setListIngredient(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getListIngredient() !== $this) {
+            $user->setListIngredient($this);
+        }
+
+        $this->user = $user;
 
         return $this;
     }
+
 }
