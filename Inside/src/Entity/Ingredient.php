@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enums\Season;
 use App\Enums\TypeIngredient;
 use App\Repository\IngredientRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,6 +21,9 @@ class Ingredient
 
     #[ORM\Column(enumType: TypeIngredient::class)]
     private ?TypeIngredient $typeIngredient = null;
+
+    #[ORM\Column(type: 'json', nullable:true, enumType: Season::class)]
+    private array $season = [];
 
     public function getId(): ?int
     {
@@ -56,4 +60,16 @@ class Ingredient
 
         return $this;
     }
+
+    public function getSeason(): ?array
+    {
+        return $this->season;
+    }
+
+    public function setSeason(array $season): self
+    {
+        $this->season = $season;
+        return $this;
+    }
+
 }

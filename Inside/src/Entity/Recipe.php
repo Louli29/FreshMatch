@@ -39,7 +39,11 @@ class Recipe
     #[ORM\ManyToMany(targetEntity: IngredientRecipe::class, inversedBy: 'Recipe')]
     private Collection $ingredientRecipe;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergy::class)]
+    #[ORM\ManyToOne(inversedBy: 'Recipes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergy::class)]    
     private ?array $allergys = null;
 
     #[ORM\Column(nullable: true, enumType: Diet::class)]
