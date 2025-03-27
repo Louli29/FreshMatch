@@ -27,14 +27,11 @@ class IngredientRecipe
     #[ORM\JoinColumn(nullable: false)]
     private ?Ingredient $ingredient = null;
 
-    /**
-     * @var Collection<int, Recipe>
-     */
     #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: 'ingredientRecipes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Recipe $recipe;
 
-    public function __construct($recipe)
+    public function __construct(?Recipe $recipe = null)
     {
         $this->recipe = $recipe;
     }
@@ -91,10 +88,6 @@ class IngredientRecipe
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Recipe>
-     */
 
     public function getRecipe(): ?Recipe
     {

@@ -36,14 +36,11 @@ class Recipe
     /**
      * @var Collection<int, IngredientRecipe>
      */
-    /**
-     * @var Collection<int, IngredientRecipe>
-     */
     #[ORM\OneToMany(targetEntity: IngredientRecipe::class, mappedBy: 'recipe', cascade: ['persist', 'remove'])]
     private Collection $ingredientRecipe;
 
     #[ORM\ManyToOne(inversedBy: 'Recipes')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
     #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergy::class)]    
