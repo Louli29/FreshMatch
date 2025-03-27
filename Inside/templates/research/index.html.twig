@@ -4,7 +4,10 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const searchInput = document.getElementById('search-input');
-            const suggestionList = document.querySelector('#pop-autocomplete')
+            const suggestionList = document.querySelector('#pop-autocomplete');
+            const ingredientContainer = document.querySelector('.ingredients .ingredient');
+            let selectedIngredients = [];
+
             searchInput.addEventListener("input", function () {
                 const query = searchInput.value.trim();
 
@@ -24,6 +27,22 @@
                             item.textContent = ingredient.name;
 
                             item.addEventListener("click", function () {
+                                if (!selectedIngredients.includes(ingredient.name)) {
+                                    selectedIngredients.push(ingredient.name);
+
+                                    const ingEl = document.createElement("span");
+                                    ingEl.classList.add("badge", "bg-success", "m-1");
+                                    ingEl.textContent = ingredient.name;
+
+                                    // Optionally add a remove button
+                                    ingEl.addEventListener("click", function () {
+                                        ingEl.remove();
+                                        selectedIngredients = selectedIngredients.filter(i => i !== ingredient.name);
+                                    });
+
+                                    ingredientContainer.appendChild(ingEl);
+                                }
+
                                 searchInput.value = "";
                                 suggestionList.innerHTML = "";
                                 suggestionList.style.display = "none";
@@ -34,8 +53,17 @@
                     })
                     .catch(error => console.error("Erreur lors de la récupération des ingrédients :", error));
             });
+
+            const submitBtn = document.querySelector('.btn-success');
+            submitBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const params = new URLSearchParams();
+                selectedIngredients.forEach(name => params.append('ingredients[]', name));
+                window.location.href = `/recettes?${params.toString()}`;
+            });
         });
     </script>
+
     <div class="container-research">
         <h2> Fais vibrer tes ingrédients !</h2>
         <h4>On évite la poubelle !</h4>
