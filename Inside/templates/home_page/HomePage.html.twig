@@ -45,9 +45,15 @@
         <table>
             <tr>
                 {% for recipe in recipes %}
+                  <td class="recipeTitle"> {{recipe.name}}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for recipe in recipes %}
                   <td> <a href="path('')" class="thirthArticleLink"><img src="/pictures/{{recipe.imageLink}}" alt ="{{ recipe.imageLink }} picture " title="Cliquez pour voir la recette !"> </a></td>
                 {% endfor %}
             </tr>
+            
         </table>
     </article>
 
@@ -63,13 +69,19 @@
 .thirthArticleLink img {
     transition: transform 0.3s ease-in-out;
     background: linear-gradient(to bottom, #095227, #4B8947);
-    width: 250px; 
-    height: 250px;
+    width: 200px; 
+    height: 200px;
 }
 
 .thirthArticleLink img:hover {
     transform: scale(1.1);
     filter: brightness(1.2);
+}
+.recipeTitle {
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    color: #CDA37B;
 }
 
 </style>

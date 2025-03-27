@@ -43,11 +43,11 @@ class Recipe
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\Column(type: 'json', nullable: true, enumType: Allergy::class)]
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergy::class)]    
     private ?array $allergys = null;
 
-    #[ORM\Column(type: 'json', nullable: true, enumType: Diet::class)]
-    private ?array $diet = null;
+    #[ORM\Column(nullable: true, enumType: Diet::class)]
+    private ?Diet $diet = null;
 
     #[ORM\Column(type: 'string')]
     private string $imageLink;
@@ -185,7 +185,7 @@ class Recipe
         return $this->allergys;
     }
 
-    public function setAllergys(?array $allergys): self
+    public function setAllergys(?array $allergys): static
     {
         $this->allergys = $allergys;
 
@@ -197,7 +197,7 @@ class Recipe
         return $this->diet;
     }
 
-    public function setDiet(?Diet $diet): self
+    public function setDiet(?Diet $diet): static
     {
         $this->diet = $diet;
 

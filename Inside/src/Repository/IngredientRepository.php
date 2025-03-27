@@ -15,6 +15,7 @@ class IngredientRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ingredient::class);
     }
+    
     public function findSeasonIngredients($saison)
     {
         return $this->createQueryBuilder('i')
