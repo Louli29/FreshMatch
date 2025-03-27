@@ -31,12 +31,13 @@ class IngredientRecipe
     /**
      * @var Collection<int, Recipe>
      */
-    #[ORM\ManyToMany(targetEntity: Recipe::class, mappedBy: 'ingredientRecipe')]
-    private Collection $recipe;
+    #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: 'ingredientRecipes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Recipe $recipe;
 
-    public function __construct()
+    public function __construct($recipe)
     {
-        $this->recipe = new ArrayCollection();
+        $this->recipe = $recipe;
     }
 
     public function getId(): ?int
@@ -95,26 +96,15 @@ class IngredientRecipe
     /**
      * @return Collection<int, Recipe>
      */
-    public function getRecipe(): Collection
+
+    public function getRecipe(): ?Recipe
     {
         return $this->recipe;
     }
 
-    public function addRecipe(Recipe $recipe): static
+    public function setRecipe(?Recipe $recipe): static
     {
-        if (!$this->recipe->contains($recipe)) {
-            $this->recipe->add($recipe);
-            $recipe->addIngredientRecipe($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRecipe(Recipe $recipe): static
-    {
-        if ($this->recipe->removeElement($recipe)) {
-            $recipe->removeIngredientRecipe($this);
-        }
+        $this->recipe = $recipe;
 
         return $this;
     }

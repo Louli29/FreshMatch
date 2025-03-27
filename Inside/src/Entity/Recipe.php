@@ -36,8 +36,11 @@ class Recipe
     /**
      * @var Collection<int, IngredientRecipe>
      */
-    #[ORM\ManyToMany(targetEntity: IngredientRecipe::class, inversedBy: 'Recipe')]
-    private Collection $ingredientRecipe;
+    /**
+     * @var Collection<int, IngredientRecipe>
+     */
+    #[ORM\OneToMany(targetEntity: IngredientRecipe::class, mappedBy: 'recipe', cascade: ['persist', 'remove'])]
+    private Collection $ingredientRecipes;
 
     #[ORM\ManyToOne(inversedBy: 'Recipes')]
     #[ORM\JoinColumn(nullable: false)]
@@ -51,8 +54,7 @@ class Recipe
 
     #[ORM\Column(type: 'string')]
     private ?string $imageLink = '';
-    #[ORM\ManyToOne(inversedBy: 'recettes')]
-    private ?User $user = null;
+
 
     public function getImageLink(): string
     {
@@ -68,7 +70,7 @@ class Recipe
 
     public function __construct()
     {
-        $this->ingredientRecipe = new ArrayCollection();
+        $this->ingredientRecipes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -146,15 +148,16 @@ class Recipe
     /**
      * @return Collection<int, IngredientRecipe>
      */
-    public function getIngredientRecipe(): Collection
+    public function getIngredientRecipes(): Collection
     {
-        return $this->ingredientRecipe;
+        return $this->ingredientRecipes;
     }
 
     public function addIngredientRecipe(IngredientRecipe $ingredientRecipe): static
     {
-        if (!$this->ingredientRecipe->contains($ingredientRecipe)) {
-            $this->ingredientRecipe->add($ingredientRecipe);
+        if (!$this->ingredientRecipes->contains($ingredientRecipe)) {
+            $this->ingredientRecipes->add($ingredientRecipe);
+            $ingredientRecipe->setRecipe($this);
         }
 
         return $this;
@@ -162,7 +165,12 @@ class Recipe
 
     public function removeIngredientRecipe(IngredientRecipe $ingredientRecipe): static
     {
-        $this->ingredientRecipe->removeElement($ingredientRecipe);
+        if ($this->ingredientRecipes->removeElement($ingredientRecipe)) {
+            // Set the owning side to null (unless already changed)
+            if ($ingredientRecipe->getRecipe() === $this) {
+                $ingredientRecipe->setRecipe(null);
+            }
+        }
 
         return $this;
     }
