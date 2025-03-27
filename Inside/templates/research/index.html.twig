@@ -1,0 +1,60 @@
+{% extends 'Main.html.twig' %}
+{% block title %}Recherche{% endblock %}
+{% block main %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById('search-input');
+            const suggestionList = document.querySelector('#pop-autocomplete')
+            searchInput.addEventListener("input", function () {
+                const query = searchInput.value.trim();
+
+                if (query.length < 2) {
+                    suggestionList.innerHTML = "";
+                    return;
+                }
+
+                fetch(`/autocomplete/ingredients?term=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        suggestionList.style.display = "block";
+                        suggestionList.innerHTML = "";
+                        data.forEach(ingredient => {
+                            const item = document.createElement("li");
+                            item.classList.add("list-group-item", "list-group-item-action");
+                            item.textContent = ingredient.name;
+
+                            item.addEventListener("click", function () {
+                                searchInput.value = "";
+                                suggestionList.innerHTML = "";
+                                suggestionList.style.display = "none";
+                            });
+
+                            suggestionList.appendChild(item);
+                        });
+                    })
+                    .catch(error => console.error("Erreur lors de la récupération des ingrédients :", error));
+            });
+        });
+    </script>
+    <div class="container-research">
+        <h2> Fais vibrer tes ingrédients !</h2>
+        <h4>On évite la poubelle !</h4>
+
+        <div class="research-box">
+            <label for="search-input">Ajouter un ingrédient à la recherche</label>
+            <input id="search-input" type="text" placeholder="Tomates, poulet..." />
+            <div id="pop-autocomplete">
+
+            </div>
+           <div class="ingredients">
+               <div class="ingredient"></div>
+           </div>
+        </div>
+
+
+        <a href="" class="btn btn-success">
+            A vos fourneaux !
+        </a>
+    </div>
+{% endblock %}
+
