@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\ListIngrUser;
 use App\Entity\User;
-use App\form\ListIngrUserType;
+use App\Form\ListIngrUserType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
