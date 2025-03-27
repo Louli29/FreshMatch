@@ -1,4 +1,47 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+{% block content %}
+    <div class="container">
+    
+        <div class="form-container">
+
+            {{ form_start(form) }}
+                <div class="mb-3">
+                    {{ form_row(form.name) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_row(form.Email) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_row(form.plainPassword) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_row(form.diet) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_row(form.allergy) }}
+                </div>
+
+            <div class="mb-3 text-center">
+                <button type="submit" class="btn btn-success">
+                    {{ button_label|default("S'inscrire") }}
+                </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block stylesheets %}
+    <style>
+        .form-container {
+            background-color: #F2DAB4;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+{% endblock %}

@@ -46,8 +46,7 @@ class Recipe
     private ?Diet $diet = null;
 
     #[ORM\Column(type: 'string')]
-    private string $imageLink;
-
+    private ?string $imageLink = '';
     #[ORM\ManyToOne(inversedBy: 'recettes')]
     private ?User $user = null;
 
