@@ -33,8 +33,7 @@ class IngredientRecipe
     #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: 'ingredientRecipes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Recipe $recipe;
-
-    public function __construct($recipe)
+    public function __construct(?Recipe $recipe = null)
     {
         $this->recipe = $recipe;
     }

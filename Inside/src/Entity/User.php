@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Recipe>
      */
     #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'q')]
-    private Collection $recipes;
+    private ?Collection $recipes=null;
 
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
     private ?ListIngrUser $listIngredient = null;

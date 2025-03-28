@@ -27,6 +27,33 @@ final class RecipeController extends AbstractController
         ]);
     }
 
+    #[Route('/result', name: 'app_recipe_search', methods: ['GET'])]
+    public function search(Request $request, EntityManagerInterface $em): Response
+    {
+        $ingredientNames = $request->query->all('ingredients'); // ['Tomate', 'Poulet', etc.]
+
+        if (empty($ingredientNames)) {
+            return $this->redirectToRoute('app_recipe_index');
+        }
+
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('r')
+            ->from('App\Entity\Recipe', 'r')
+            ->join('r.ingredientRecipe', 'ir')
+            ->join('ir.ingredient', 'i')
+            ->where($qb->expr()->in('i.name', ':names'))
+            ->setParameter('names', $ingredientNames)
+            ->groupBy('r.id');
+
+        $recipes = $qb->getQuery()->getResult();
+
+        return $this->render('recipe/index.html.twig', [
+            'recipes' => $recipes,
+        ]);
+    }
+
+
     #[Route('/new', name: 'app_recipe_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager,Security $security): Response
     {

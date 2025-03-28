@@ -57,10 +57,12 @@
             const submitBtn = document.querySelector('.btn-success');
             submitBtn.addEventListener('click', function (e) {
                 e.preventDefault();
+                const baseUrl = submitBtn.dataset.url;
                 const params = new URLSearchParams();
                 selectedIngredients.forEach(name => params.append('ingredients[]', name));
-                window.location.href = `/recettes?${params.toString()}`;
+                window.location.href = `${baseUrl}?${params.toString()}`;
             });
+
         });
     </script>
 
@@ -79,9 +81,8 @@
            </div>
         </div>
 
-
-        <a href="" class="btn btn-success">
-            A vos fourneaux !
+        <a href="{{ path('app_recipe_search') }}">
+            <button class="btn btn-success">Rechercher une recette</button>
         </a>
     </div>
 {% endblock %}
