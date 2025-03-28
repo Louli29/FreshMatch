@@ -161,7 +161,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->recipes->contains($recipe)) {
             $this->recipes->add($recipe);
-            $recipe->setRecipe($this);
         }
 
         return $this;

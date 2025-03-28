@@ -52,7 +52,8 @@ class RecipeFixtures extends Fixture
             $recipe->setNbPerson($data['nbPerson']);
             $recipe->setImageLink($data['imageLink']);
 
-            $user = $manager->getRepository(User::class)->findOneBy(['id'=>1]);
+
+            $user = $manager->getRepository(User::class)->findOneBy(['id'=>12]);    
 
             $recipe->setUser($user);
             // Persist the recipe
@@ -72,9 +73,8 @@ class RecipeFixtures extends Fixture
                     $ingredientRecipe->setUnite($ingredientData['unite']);
                     $ingredientRecipe->setRemplacable($ingredientData['remplacable']);
 
-                    // Add the IngredientRecipe to the recipe
                     $recipe->addIngredientRecipe($ingredientRecipe);
-
+                    
                     // Persist the IngredientRecipe entity
                     $manager->persist($ingredientRecipe);
                 }
@@ -86,4 +86,3 @@ class RecipeFixtures extends Fixture
     }
 }
 ?>
-
