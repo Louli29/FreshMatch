@@ -50,7 +50,8 @@
             </tr>
             <tr>
                 {% for recipe in recipes %}
-                    <td> <a href="{{path('app_recipe_show', {'id': recipe.id})}}" class="thirthArticleLink"><img src="/pictures/{{recipe.imageLink}}" alt ="{{ recipe.imageLink }} picture " title="Cliquez pour voir la recette !"> </a></td>                {% endfor %}
+                  <td> <a href="{{path('app_recipe_show', {'id': recipe.id})}}" class="thirthArticleLink"><img src="/pictures/{{recipe.imageLink}}" alt ="{{ recipe.imageLink }} picture " title="Cliquez pour voir la recette !"> </a></td>
+                {% endfor %}
             </tr>
             
         </table>
@@ -60,14 +61,13 @@
 <style>
 .tirth-acticle{
     background-color: #F9EEE0;
-    padding-bottom:50px;
+    padding-bottom:20px;
 }
 
 .thirthArticleLink img {
     transition: transform 0.3s ease-in-out;
     width: 200px; 
     height: 200px;
-    padding: 20px;
 }
 
 .thirthArticleLink img:hover {
