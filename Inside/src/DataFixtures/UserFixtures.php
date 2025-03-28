@@ -3,6 +3,11 @@
 namespace App\DataFixtures;
 
 use AllowDynamicProperties;
+use App\Entity\Ingredient;
+use App\Enums\Allergy;
+use App\Enums\Diet;
+use App\Entity\User;
+use App\Entity\ListIngrUser;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;

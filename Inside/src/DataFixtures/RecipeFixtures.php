@@ -20,7 +20,7 @@ class RecipeFixtures extends Fixture
                 'description' => 'Un plat savoureux de poulet épicé au curry.',
                 'step' => '1. Faire revenir le poulet. 2. Ajouter le curry et la crème. 3. Laisser mijoter.',
                 'nbPerson' => 4,
-                'imageLink' => 'poulet-au-curry.webp',
+                'imageLink' => 'poulet-au-curry.jpeg',
                 'ingredients' => [
                     ['name' => 'Poulet', 'quantity' => 500, 'unite' => 'g', 'remplacable' => false],
                     ['name' => 'Curry', 'quantity' => 10, 'unite' => 'g', 'remplacable' => true],
