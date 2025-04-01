@@ -4,12 +4,15 @@ namespace App\Controller;
 
 use App\Entity\ListIngrUser;
 use App\Entity\User;
+use App\Enums\TypeIngredient;
 use App\Form\ListIngrUserType;
 use App\Form\UserType;
+use App\Repository\IngredientRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -56,10 +59,11 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_user_account', methods: ['GET'])]
+
+
+    #[Route('/{id}', name: 'app_user_account', methods: ['GET', 'POST'])]
     public function account(User $user, Request $request, EntityManagerInterface $em): Response
     {
-
         $listIngrUser = $user->getListIngredient();
         if (!$listIngrUser) {
             $listIngrUser = new ListIngrUser();
@@ -69,20 +73,34 @@ final class UserController extends AbstractController
         $form = $this->createForm(ListIngrUserType::class, $listIngrUser);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($listIngrUser);
-            $em->flush();
-
-            $this->addFlash('success', 'Ingrédients ajoutés à ton placard');
-            return $this->redirectToRoute('app_ingr_user');
-        }
+        $typeIngredients = TypeIngredient::cases();
 
         return $this->render('user/my_account.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
             'listIngrUser' => $listIngrUser,
+            'typeIngredients' => $typeIngredients,
         ]);
     }
+
+//    #[Route('/ingredient/delete/{id}', name: 'app_user_delete_ingredient', methods: ['POST'])]
+//    public function deleteIngredient(int $id, EntityManagerInterface $em, UserRepository $userRepository, IngredientRepository $ingredientRepository): JsonResponse
+//    {
+//        $user = $this->getUser();
+//
+//
+//        $ingredient = $ingredientRepository->find($id);
+//
+//        $listIngrUser = $user->getListIngredient();
+//        if ($listIngrUser && $listIngrUser->getIngredients()->contains($ingredient)) {
+//            $listIngrUser->removeIngredient($ingredient);
+//            $em->flush();
+//            return new JsonResponse(['success' => true]);
+//        }
+//
+//        return new JsonResponse(['success' => false, 'message' => 'Ingrédient non présent dans le placard'], 400);
+//    }
+
 
     #[Route('/show/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
@@ -121,4 +139,6 @@ final class UserController extends AbstractController
 
         return $this->redirectToRoute('home_page', [], Response::HTTP_SEE_OTHER);
     }
+
+
 }
