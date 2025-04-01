@@ -10,7 +10,8 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-#[AllowDynamicProperties] class UserFixtures extends Fixture
+#[AllowDynamicProperties] 
+class UserFixtures extends Fixture
 {
     private UserPasswordHasherInterface $passwordHasher;
 
@@ -43,6 +44,5 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
         $manager->flush();
     }
-
 
 }

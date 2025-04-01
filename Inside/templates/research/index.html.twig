@@ -58,6 +58,7 @@
             submitBtn.addEventListener('click', function (e) {
                 e.preventDefault();
                 const baseUrl = submitBtn.dataset.url;
+                console.log(baseUrl);
                 const params = new URLSearchParams();
                 selectedIngredients.forEach(name => params.append('ingredients[]', name));
                 window.location.href = `${baseUrl}?${params.toString()}`;
@@ -81,9 +82,7 @@
            </div>
         </div>
 
-        <a href="{{ path('app_recipe_search') }}">
-            <button class="btn btn-success">Rechercher une recette</button>
-        </a>
-    </div>
+            <button class="btn btn-success" data-url="{{ path('recipe_research') }}">Rechercher une recette</button>
+        </div>
 {% endblock %}
 

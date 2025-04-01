@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use  App\Enums\Allergy;
+use App\Enums\Allergy;
 use App\Repository\RecipeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,9 +33,6 @@ class Recipe
     #[ORM\Column]
     private ?int $nbPerson = null;
 
-    /**
-     * @var Collection<int, IngredientRecipe>
-     */
     /**
      * @var Collection<int, IngredientRecipe>
      */
