@@ -55,27 +55,24 @@ class RecipeFixtures extends Fixture
             $user = $manager->getRepository(User::class)->findOneBy(['id'=>1]);
 
             $recipe->setUser($user);
-            // Persist the recipe
             $manager->persist($recipe);
 
             // Add ingredients and link to the recipe
             foreach ($data['ingredients'] as $ingredientData) {
-                // Find the ingredient by name
                 $ingredient = $manager->getRepository(Ingredient::class)->findOneBy(['name' => $ingredientData['name']]);
 
                 if ($ingredient) {
-                    // Create a new IngredientRecipe object
                     $ingredientRecipe = new IngredientRecipe();
-                    $ingredientRecipe->setRecipe($recipe);  // Associate the recipe
-                    $ingredientRecipe->setIngredient($ingredient);  // Associate the ingredient
+                    $ingredientRecipe->setRecipe($recipe);
+                    $ingredientRecipe->setIngredient($ingredient);
                     $ingredientRecipe->setQuantity($ingredientData['quantity']);
                     $ingredientRecipe->setUnite($ingredientData['unite']);
                     $ingredientRecipe->setRemplacable($ingredientData['remplacable']);
 
-                    // Add the IngredientRecipe to the recipe
+
                     $recipe->addIngredientRecipe($ingredientRecipe);
 
-                    // Persist the IngredientRecipe entity
+
                     $manager->persist($ingredientRecipe);
                 }
             }
