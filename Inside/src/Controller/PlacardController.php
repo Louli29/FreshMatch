@@ -76,6 +76,30 @@ class PlacardController extends AbstractController
         return $this->redirectToRoute('app_user_account', ['id' => $user->getId()]);
     }
 
+    #[Route('/remove', name: 'app_placard_remove', methods: ['POST'])]
+    public function removeFromPlacard(Request $request, EntityManagerInterface $em, IngredientRepository $ingredientRepository):\Symfony\Component\HttpFoundation\RedirectResponse
+    {
+        $user = $this->getUser();
+        $ingredientId = $request->request->get('ingredient_id');
+
+
+        $ingredient = $ingredientRepository->find($ingredientId);
+        if (!$ingredient) {
+            $this->addFlash('warning', 'Ingrédients non trouvé dans la bdd !');
+            return $this->redirectToRoute('app_user_account', ['id' => $user->getId()]);
+        }
+
+        $listIngrUser = $user->getListIngredient();
+        if ($listIngrUser && $listIngrUser->getIngredient()->contains($ingredient)) {
+            $listIngrUser->removeIngredient($ingredient);
+            $em->flush();
+            $this->addFlash('success', 'Ingrédients ajoutés à votre placard !');
+            return $this->redirectToRoute('app_user_account', ['id' => $user->getId()]);
+        }
+
+        return $this->redirectToRoute('app_user_account', ['id' => $user->getId()]);
+    }
+
 
     public function account(User $user, EntityManagerInterface $em): \Symfony\Component\HttpFoundation\Response
     {
