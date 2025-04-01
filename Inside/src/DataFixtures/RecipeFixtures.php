@@ -20,7 +20,7 @@ class RecipeFixtures extends Fixture
                 'description' => 'Un plat savoureux de poulet épicé au curry.',
                 'step' => '1. Faire revenir le poulet. 2. Ajouter le curry et la crème. 3. Laisser mijoter.',
                 'nbPerson' => 4,
-                'imageLink' => 'poulet-au-curry.webp',
+                'imageLink' => './public/pictures/recette1.jpg',
                 'ingredients' => [
                     ['name' => 'Poulet', 'quantity' => 500, 'unite' => 'g', 'remplacable' => false],
                     ['name' => 'Curry', 'quantity' => 10, 'unite' => 'g', 'remplacable' => true],
@@ -33,7 +33,7 @@ class RecipeFixtures extends Fixture
                 'description' => 'Une salade fraîche et équilibrée avec du quinoa.',
                 'step' => '1. Cuire le quinoa. 2. Ajouter les légumes coupés. 3. Assaisonner.',
                 'nbPerson' => 2,
-                'imageLink' => 'salade-de-quinoa.jpg',
+                'imageLink' => 'public/pictures/recette1.jpg',
                 'ingredients' => [
                     ['name' => 'Salade', 'quantity' => 250, 'unite'=>'g','remplacable'=>false],
                     ['name' => 'Tomate', 'quantity' => 2, 'unite' => 'pièce', 'remplacable' => true],
