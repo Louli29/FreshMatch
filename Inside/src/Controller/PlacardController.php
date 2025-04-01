@@ -34,11 +34,23 @@ class PlacardController extends AbstractController
             throw $this->createNotFoundException('Type d\'ingrédient invalide.');
         }
 
+        $user = $this->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté.');
+        }
+
+        $listIngrUser = $user->getListIngredient();
+        $alreadyInPlacard = $listIngrUser ? $listIngrUser->getIngredient()->map(fn($i) => $i->getId())->toArray() : [];
 
         $ingredients = $ingredientRepository->findByTypeIngredient($type);
 
+
+        $filteredIngredients = array_filter($ingredients, fn($ingredient) => !in_array($ingredient->getId(), $alreadyInPlacard));
+
+
+
         return $this->render('placard/ingredient_selection_form.html.twig', [
-            'ingredients' => $ingredients,
+            'ingredients' => $filteredIngredients,
             'type' => $type
         ]);
     }
@@ -48,7 +60,7 @@ class PlacardController extends AbstractController
     #[Route('/add', name: 'app_placard_add', methods: ['POST'])]
     public function addToPlacard(Request $request, EntityManagerInterface $em, IngredientRepository $ingredientRepository): \Symfony\Component\HttpFoundation\RedirectResponse
     {
-        $user = $this->getUser(); // Récupération de l'utilisateur connecté
+        $user = $this->getUser();
         $ingredientIds = $request->request->all('ingredients');
 
         if (!$ingredientIds) {
@@ -63,7 +75,14 @@ class PlacardController extends AbstractController
             $em->persist($listIngrUser);
         }
 
+        $alreadyInPlacard = $listIngrUser->getIngredient()->map(fn($i) => $i->getId())->toArray();
+
         foreach ($ingredientIds as $ingredientId) {
+            if (in_array($ingredientId, $alreadyInPlacard)) {
+                $this->addFlash('info', 'L’ingrédient est déjà dans votre placard.');
+                continue;
+            }
+
             $ingredient = $ingredientRepository->find($ingredientId);
             if ($ingredient) {
                 $listIngrUser->addIngredient($ingredient);
@@ -75,6 +94,7 @@ class PlacardController extends AbstractController
 
         return $this->redirectToRoute('app_user_account', ['id' => $user->getId()]);
     }
+
 
     #[Route('/remove', name: 'app_placard_remove', methods: ['POST'])]
     public function removeFromPlacard(Request $request, EntityManagerInterface $em, IngredientRepository $ingredientRepository):\Symfony\Component\HttpFoundation\RedirectResponse
