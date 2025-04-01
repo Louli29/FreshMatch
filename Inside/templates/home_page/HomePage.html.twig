@@ -50,15 +50,13 @@
             </tr>
             <tr>
                 {% for recipe in recipes %}
-<<<<<<< HEAD
+
                     <td>
                         <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}" class="thirthArticleLink">
                             Cliquez ici pour voir la recette !
                         </a>
                     </td>
-=======
-                  <td> <a href="{{path('app_recipe_show', {'id': recipe.id})}}" class="thirthArticleLink"><img src="/pictures/{{recipe.imageLink}}" alt ="{{ recipe.imageLink }} picture " title="Cliquez pour voir la recette !"> </a></td>
->>>>>>> 4ac2cba417645433e652719b890de340c3f4196a
+
                 {% endfor %}
             </tr>
             
