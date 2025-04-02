@@ -1,61 +1,86 @@
 {% extends 'Main.html.twig' %}
 
-{% block title %}Recipe{% endblock %}
+{% block title %}{{ recipe.name }}{% endblock %}
 
 {% block main %}
-    <h1>Recipe</h1>
+    <div class="container mt-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        {% if recipe.imageLink %}
+                            <img src="{{ asset(recipe.imageLink) }}" alt="{{ recipe.name }}" class="img-fluid rounded mb-3">
+                        {% else %}
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <span class="text-muted">Aucune image</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <p class="lead fw-bold text-success">{{ recipe.description }}</p>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ recipe.id }}</td>
-            </tr>
-            <tr>
-                <th>Time</th>
-                <td>{{ recipe.time }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ recipe.name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ recipe.description }}</td>
-            </tr>
-            <tr>
-                <th>Step</th>
-                <td>{{ recipe.step }}</td>
-            </tr>
-            <tr>
-                <th>NbPerson</th>
-                <td>{{ recipe.nbPerson }}</td>
-            </tr>
-            <tr>
-                <td>{% if recipe.allergys %}
-                    {{ recipe.allergys|map(a => a.value)|join(', ') }}
-                    {% else %}
-                    Aucune allergie définie</td>
-                {% endif %}
-            </tr>
-            <tr>
-                <td> {% if recipe.diet %}
-                        {{ recipe.diet.value }}
-                    {% else %}
-                        Aucun régime alimentaire définie
-                    {% endif %}</td>
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <p><strong>Temps de préparation :</strong> {{ recipe.time }} min</p>
+                            </div>
+                            <div class="col-6">
+                                <p><strong>Nombre de personnes :</strong> {{ recipe.nbPerson }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h5>Allergènes :</h5>
+                            {% if recipe.allergys %}
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% for allergy in recipe.allergys %}
+                                        <span class="badge bg-warning text-dark">{{ allergy.value }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <span class="text-muted">Aucun allergène déclaré</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h5>Régime alimentaire :</h5>
+                            {% if recipe.diet %}
+                                <span class="badge bg-info">{{ recipe.diet.value }}</span>
+                            {% else %}
+                                <span class="text-muted">Aucun régime spécifique</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            </tr>
-            <tr>
-                <th>ImageLink</th>
-                <td>{{ recipe.imageLink }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h4 class="mb-0">Étapes de préparation</h4>
+            </div>
+            <div class="card-body">
+                <p>{{ recipe.step }}</p>
+            </div>
+        </div>
 
-    <a href="{{ path('app_recipe_index') }}">back to list</a>
 
-    <a href="{{ path('app_recipe_edit', {'id': recipe.id}) }}">edit</a>
 
-    {{ include('recipe/_delete_form.html.twig') }}
+
+        <div class="d-flex justify-content-end">
+            {{ include('recipe/_delete_form.html.twig') }}
+        </div>
+
+        <!-- Boutons à déplacer ici -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <a href="{{ path('app_recipe_index') }}" class="btn btn-outline-secondary me-2">
+                    <i class="bi bi-arrow-left"></i> Retour à la liste
+                </a>
+                <a href="{{ path('app_recipe_edit', {'id': recipe.id}) }}" class="btn btn-primary">
+                    <i class="bi bi-pencil"></i> Modifier
+                </a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

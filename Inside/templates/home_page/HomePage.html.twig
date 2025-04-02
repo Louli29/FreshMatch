@@ -1,92 +1,92 @@
 {% extends 'main.html.twig' %}
 
-
 {% block stylesheets %}
     <link href="{{asset('/css/style.css')}}" rel="stylesheet">
 {% endblock %}
 
 {% block main %}
     <article class="first-article">
-        <h4 class="title"> Dis-nous ce que tu as, on te dira quoi cuisinier !</h4>
+        <h4 class="title">Dis-nous ce que tu as, on te dira quoi cuisinier !</h4>
         <div class="container-homepage">
-            <a class="buttonIngredient" href="{{ path('recipe_research') }}"> </a>
-         Fais parler tes ingrédients !
-        </div>
+            <a class="btn btn-success" href="{{ path('recipe_research') }}">
+                Fais parler tes ingrédients !
+            </a>
     </article>
 
     <article class="second-article">
-        <h4 class="title2"> Nos recettes top chrono </h4>
+        <h4 class="title2">Nos recettes top chrono</h4>
         <table>
             <tr>
-                <td><img src="pictures/recette1.jpg" alt ="text alternatif"> </td>
-                <td><img src="pictures/recette2.jpg" alt ="text alternatif"> </td>
-                <td><img src="pictures/recette3.png" alt ="text alternatif"> </td>
+                <td><img src="pictures/recette1.jpg" alt="Recette 1"></td>
+                <td><img src="pictures/recette2.jpg" alt="Recette 2"></td>
+                <td><img src="pictures/recette3.png" alt="Recette 3"></td>
             </tr>
             <tr>
-                <td><img src="pictures/recette4.png" alt ="text alternatif"> </td>
-                <td><img src="pictures/recette5.jpg" alt ="text alternatif"> </td>
-                <td><img src="pictures/recette6.jpg" alt ="text alternatif"> </td>
+                <td><img src="pictures/recette4.png" alt="Recette 4"></td>
+                <td><img src="pictures/recette5.jpg" alt="Recette 5"></td>
+                <td><img src="pictures/recette6.jpg" alt="Recette 6"></td>
             </tr>
         </table>
     </article>
 
-    <article class="tirth-acticle">
-    {% if saison == "SPRING" %}
-        <h4 class="title"> Nos recettes de Printemps !</h4>
-    {% endif %}
-    {% if saison == "SUMMER" %}
-        <h4 class="title"> Nos recettes d'Eté !</h4>
-    {% endif %}
-    {% if saison == "AUTUMN" %}
-        <h4 class="title"> Nos recettes d'Automne !</h4>
-    {% endif %}
-    {% if saison == "WINTER" %}
-        <h4 class="title"> Nos recettes d'Hiver !</h4>
-    {% endif %}
+    <article class="article">
+        {% if saison == "SPRING" %}
+            <h4 class="title">Nos recettes de Printemps !</h4>
+        {% endif %}
+        {% if saison == "SUMMER" %}
+            <h4 class="title">Nos recettes d'Eté !</h4>
+        {% endif %}
+        {% if saison == "AUTUMN" %}
+            <h4 class="title">Nos recettes d'Automne !</h4>
+        {% endif %}
+        {% if saison == "WINTER" %}
+            <h4 class="title">Nos recettes d'Hiver !</h4>
+        {% endif %}
         <table>
             <tr>
                 {% for recipe in recipes %}
-                  <td class="recipeTitle"> {{recipe.name}}</td>
+                    <td class="recipeTitle">{{ recipe.name }}</td>
                 {% endfor %}
             </tr>
             <tr>
                 {% for recipe in recipes %}
-
                     <td>
-                        <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}" class="thirthArticleLink">
-                            Cliquez ici pour voir la recette !
+                        <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}" class="articleLink">
+                            <img src="{{ (recipe.imageLink) }}" alt="{{ recipe.name }}" class="recipe-image">
                         </a>
                     </td>
-
                 {% endfor %}
             </tr>
-            
         </table>
     </article>
 
+    <style>
+        .article {
+            background-color: #F9EEE0;
+            padding-bottom: 20px;
+        }
 
-<style>
-.tirth-acticle{
-    background-color: #F9EEE0;
-    padding-bottom:20px;
-}
+        .articleLink img {
+            transition: transform 0.3s ease-in-out;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+        }
 
-.thirthArticleLink img {
-    transition: transform 0.3s ease-in-out;
-    width: 200px; 
-    height: 200px;
-}
+        .articleLink img:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
 
-.thirthArticleLink img:hover {
-    transform: scale(1.1);
-    filter: brightness(1.2);
-}
-.recipeTitle {
-    text-align: center;
-    font-weight: bold;
-    padding: 10px;
-    color: #CDA37B;
-}
+        .recipeTitle {
+            text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            color: #CDA37B;
+        }
 
-</style>
+.recipe-image {
+            border-radius: 10px;
+        }
+    </style>
 {% endblock %}

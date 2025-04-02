@@ -5,7 +5,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             const searchInput = document.getElementById('search-input');
             const suggestionList = document.querySelector('#pop-autocomplete');
-            const ingredientContainer = document.querySelector('.ingredients .ingredient');
+            const ingredientContainer = document.querySelector('.selected-ingredients');
             let selectedIngredients = [];
 
             searchInput.addEventListener("input", function () {
@@ -31,10 +31,9 @@
                                     selectedIngredients.push(ingredient.name);
 
                                     const ingEl = document.createElement("span");
-                                    ingEl.classList.add("badge", "bg-success", "m-1");
+                                    ingEl.classList.add("badge", "bg-primary", "m-1");
                                     ingEl.textContent = ingredient.name;
 
-                                    // Optionally add a remove button
                                     ingEl.addEventListener("click", function () {
                                         ingEl.remove();
                                         selectedIngredients = selectedIngredients.filter(i => i !== ingredient.name);
@@ -54,48 +53,79 @@
                     .catch(error => console.error("Erreur lors de la récupération des ingrédients :", error));
             });
 
-            const submitBtn = document.querySelector('.btn-success');
+            const submitBtn = document.querySelector('.btn-search');
             submitBtn.addEventListener('click', function (e) {
                 e.preventDefault();
                 const baseUrl = submitBtn.dataset.url;
-                console.log(baseUrl);
                 const params = new URLSearchParams();
-
-               // selectedIngredients.forEach(name => params.append('ingredients[]', name));
                 params.append('ingredients',selectedIngredients.join(','));
                 window.location.href = `${baseUrl}?${params.toString()}`;
             });
-
         });
     </script>
 
-    <div class="container-research">
-        <h2> Fais vibrer tes ingrédients !</h2>
-        <h4>On évite la poubelle !</h4>
+    <div class="container mt-4">
+        <div class="text-center mb-4">
+            <h2 class="mb-3">Fais vibrer tes ingrédients !</h2>
+            <h4 class="text-muted">On évite la poubelle !</h4>
+        </div>
 
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="search-input" class="form-label">Ajouter un ingrédient à la recherche</label>
+                    <input id="search-input" type="text" class="form-control" placeholder="Tomates, poulet...">
+                    <ul id="pop-autocomplete" class="list-group mt-1" style="display: none; max-height: 200px; overflow-y: auto;"></ul>
+                </div>
 
-        <div class="research-box">
-            <label for="search-input">Ajouter un ingrédient à la recherche</label>
-            <input id="search-input" type="text" placeholder="Tomates, poulet..." />
-            <div id="pop-autocomplete"></div>
-            <div class="ingredients">
-                <div class="ingredient"></div>
+                <div class="mb-3">
+                    <h5>Ingrédients sélectionnés :</h5>
+                    <div class="selected-ingredients"></div>
+                </div>
+
+                <button class="btn btn-success btn-search w-100" data-url="{{ path('recipe_research') }}">
+                    Rechercher une recette
+                </button>
             </div>
         </div>
 
-        <button class="btn btn-success" data-url="{{ path('recipe_research') }}">Rechercher une recette</button>
-
-        <h3>Recettes trouvées :</h3>
-        <ul>
-            {% for recipeData in recipes %}
-                <li>{{ recipeData.recipe.name }} - {{ recipeData.recipe.description }}</li>
-                <p>Score de correspondance : {{ recipeData.score }}</p>
-            {% else %}
-                <li>Aucune recette trouvée</li>
-            {% endfor %}
-
-        </ul>
-
-
+        <div class="card">
+            <div class="card-body">
+                <h3 class="mb-3">Recettes trouvées :</h3>
+                
+                {% if recipes|length > 0 %}
+                    <div class="list-group">
+                        {% for recipeData in recipes %}
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <h5>{{ recipeData.recipe.name }}</h5>
+                                    <span class="badge bg-success">{{ recipeData.score }}</span>
+                                </div>
+                                <p>{{ recipeData.recipe.description }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        Aucune recette trouvée avec ces ingrédients
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
+
+    <style>
+        .pop-autocomplete {
+            position: absolute;
+            z-index: 1000;
+            width: calc(100% - 30px);
+        }
+        
+        .selected-ingredients .badge {
+            cursor: pointer;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+    </style>
 {% endblock %}
