@@ -20,7 +20,7 @@ class RecipeFixtures extends Fixture
                 'description' => 'Un plat savoureux de poulet épicé au curry.',
                 'step' => '1. Faire revenir le poulet. 2. Ajouter le curry et la crème. 3. Laisser mijoter.',
                 'nbPerson' => 4,
-                'imageLink' => 'poulet-au-curry.jpeg',
+                'imageLink' => './public/pictures/recette1.jpg',
                 'ingredients' => [
                     ['name' => 'Poulet', 'quantity' => 500, 'unite' => 'g', 'remplacable' => false],
                     ['name' => 'Curry', 'quantity' => 10, 'unite' => 'g', 'remplacable' => true],
@@ -33,7 +33,7 @@ class RecipeFixtures extends Fixture
                 'description' => 'Une salade fraîche et équilibrée avec du quinoa.',
                 'step' => '1. Cuire le quinoa. 2. Ajouter les légumes coupés. 3. Assaisonner.',
                 'nbPerson' => 2,
-                'imageLink' => 'salade-de-quinoa.jpg',
+                'imageLink' => 'public/pictures/recette1.jpg',
                 'ingredients' => [
                     ['name' => 'Salade', 'quantity' => 250, 'unite'=>'g','remplacable'=>false],
                     ['name' => 'Tomate', 'quantity' => 2, 'unite' => 'pièce', 'remplacable' => true],
@@ -56,32 +56,26 @@ class RecipeFixtures extends Fixture
             $user = $manager->getRepository(User::class)->findOneBy(['id'=>12]);    
 
             $recipe->setUser($user);
-            // Persist the recipe
             $manager->persist($recipe);
 
             // Add ingredients and link to the recipe
             foreach ($data['ingredients'] as $ingredientData) {
-                // Find the ingredient by name
                 $ingredient = $manager->getRepository(Ingredient::class)->findOneBy(['name' => $ingredientData['name']]);
 
                 if ($ingredient) {
-                    // Create a new IngredientRecipe object
                     $ingredientRecipe = new IngredientRecipe();
-                    $ingredientRecipe->setRecipe($recipe);  // Associate the recipe
-                    $ingredientRecipe->setIngredient($ingredient);  // Associate the ingredient
+                    $ingredientRecipe->setRecipe($recipe);
+                    $ingredientRecipe->setIngredient($ingredient);
                     $ingredientRecipe->setQuantity($ingredientData['quantity']);
                     $ingredientRecipe->setUnite($ingredientData['unite']);
                     $ingredientRecipe->setRemplacable($ingredientData['remplacable']);
 
+
                     $recipe->addIngredientRecipe($ingredientRecipe);
-                    
-                    // Persist the IngredientRecipe entity
                     $manager->persist($ingredientRecipe);
                 }
             }
         }
-
-        // Flush the changes to the database
         $manager->flush();
     }
 }
