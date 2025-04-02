@@ -1,0 +1,169 @@
+{% block stylesheets %}
+    <style>
+        .form-container {
+            background-color: #F2DAB4;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-border-table th, .no-border-table td {
+            border: none;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            text-align: center; 
+        }
+    </style>
+{% endblock %}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Mes informations</h2>
+            <div class="form-container">
+                <table class="table table-hover no-border-table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Nom</th>
+                            <td>{{ user.name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Email</th>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Régime alimentaire</th>
+                            <td>
+                                {% if user.diet %}
+                                    {{ user.diet.value }}
+                                {% else %}
+                                    Aucun régime alimentaire défini
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Allergies</th>
+                            <td>
+                                {% if user.allergy %}
+                                    {{ user.allergy|map(a => a.value)|join(', ') }}
+                                {% else %}
+                                    Aucune allergie définie
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="text-center mt-3">
+                    <a href="{{ path('app_user_show', { 'id': user.id }) }}" class="btn btn-primary rounded">Voir toutes mes informations</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h2>Mon placard</h2>
+            <div class="form-container">
+                {% if listIngrUser.ingredient|length > 0 %}
+                    <table class="table table-hover no-border-table">
+                        <thead>
+                            <tr>
+                                <th>Nom de l'ingrédient</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ingredient in listIngrUser.ingredient %}
+                                <tr>
+                                    
+                                    <td>{{ ingredient.name }}</td>
+                                    <td>{{ ingredient.typeIngredient.value|capitalize }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="alert alert-info text-center">Aucun ingrédient dans votre placard pour le moment.</p>
+                {% endif %}
+
+                <div class="text-center mt-4">
+                    <button id="show-add-ingredient" class="btn btn-success rounded">+ Ajouter des ingrédients</button>
+
+                    <div id="ingredient-search-container" class="mt-3" style="display: none;">
+                        <input type="text" id="ingredient-search" class="form-control" placeholder="Rechercher un ingrédient...">
+                        <ul id="ingredient-suggestions" class="list-group mt-2"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const addButton = document.getElementById("show-add-ingredient");
+        const searchContainer = document.getElementById("ingredient-search-container");
+        const searchInput = document.getElementById("ingredient-search");
+        const suggestionList = document.getElementById("ingredient-suggestions");
+        const placardTable = document.querySelector("tbody");
+
+        addButton.addEventListener("click", function () {
+            searchContainer.style.display = "block";
+            searchInput.focus();
+        });
+
+        searchInput.addEventListener("input", function () {
+            const query = searchInput.value.trim();
+            if (query.length < 2) {
+                suggestionList.innerHTML = "";
+                return;
+            }
+
+            fetch(`/autocomplete/ingredients?term=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    suggestionList.innerHTML = "";
+                    data.forEach(ingredient => {
+                        const item = document.createElement("li");
+                        item.classList.add("list-group-item", "list-group-item-action");
+                        item.textContent = ingredient.name;
+                        item.dataset.id = ingredient.id;
+
+                        item.addEventListener("click", function () {
+                            addIngredientToUser(ingredient);
+                            searchInput.value = "";
+                            suggestionList.innerHTML = "";
+                            searchContainer.style.display = "none";
+                        });
+
+                        suggestionList.appendChild(item);
+                    });
+                })
+                .catch(error => console.error("Erreur lors de la récupération des ingrédients :", error));
+        });
+
+        function addIngredientToUser(ingredient) {
+            fetch('/add-ingredient', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ingredient_id: ingredient.id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const newRow = document.createElement("tr");
+                    newRow.innerHTML = `
+                        <th scope="row">${placardTable.children.length + 1}</th>
+                        <td>${ingredient.name}</td>
+                        <td>${ingredient.type.charAt(0).toUpperCase() + ingredient.type.slice(1)}</td>
+                    `;
+                    placardTable.appendChild(newRow);
+                }
+            })
+            .catch(error => console.error("Erreur lors de l'ajout de l'ingrédient :", error));
+        }
+    });
+</script>

@@ -15,7 +15,7 @@ class IngredientRecipeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, IngredientRecipe::class);
     }
-
+    
 //    /**
 //     * @return IngredientRecette[] Returns an array of IngredientRecette objects
 //     */

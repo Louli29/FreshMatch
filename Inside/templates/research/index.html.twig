@@ -1,0 +1,100 @@
+{% extends 'Main.html.twig' %}
+{% block title %}Recherche{% endblock %}
+{% block main %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById('search-input');
+            const suggestionList = document.querySelector('#pop-autocomplete');
+            const ingredientContainer = document.querySelector('.ingredients .ingredient');
+            let selectedIngredients = [];
+
+            searchInput.addEventListener("input", function () {
+                const query = searchInput.value.trim();
+
+                if (query.length < 2) {
+                    suggestionList.innerHTML = "";
+                    return;
+                }
+
+                fetch(`/autocomplete/ingredients?term=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        suggestionList.style.display = "block";
+                        suggestionList.innerHTML = "";
+                        data.forEach(ingredient => {
+                            const item = document.createElement("li");
+                            item.classList.add("list-group-item", "list-group-item-action");
+                            item.textContent = ingredient.name;
+
+                            item.addEventListener("click", function () {
+                                if (!selectedIngredients.includes(ingredient.name)) {
+                                    selectedIngredients.push(ingredient.name);
+
+                                    const ingEl = document.createElement("span");
+                                    ingEl.classList.add("badge", "bg-success", "m-1");
+                                    ingEl.textContent = ingredient.name;
+
+                                    // Optionally add a remove button
+                                    ingEl.addEventListener("click", function () {
+                                        ingEl.remove();
+                                        selectedIngredients = selectedIngredients.filter(i => i !== ingredient.name);
+                                    });
+
+                                    ingredientContainer.appendChild(ingEl);
+                                }
+
+                                searchInput.value = "";
+                                suggestionList.innerHTML = "";
+                                suggestionList.style.display = "none";
+                            });
+
+                            suggestionList.appendChild(item);
+                        });
+                    })
+                    .catch(error => console.error("Erreur lors de la récupération des ingrédients :", error));
+            });
+
+            const submitBtn = document.querySelector('.btn-success');
+            submitBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const baseUrl = submitBtn.dataset.url;
+                console.log(baseUrl);
+                const params = new URLSearchParams();
+
+               // selectedIngredients.forEach(name => params.append('ingredients[]', name));
+                params.append('ingredients',selectedIngredients.join(','));
+                window.location.href = `${baseUrl}?${params.toString()}`;
+            });
+
+        });
+    </script>
+
+    <div class="container-research">
+        <h2> Fais vibrer tes ingrédients !</h2>
+        <h4>On évite la poubelle !</h4>
+
+
+        <div class="research-box">
+            <label for="search-input">Ajouter un ingrédient à la recherche</label>
+            <input id="search-input" type="text" placeholder="Tomates, poulet..." />
+            <div id="pop-autocomplete"></div>
+            <div class="ingredients">
+                <div class="ingredient"></div>
+            </div>
+        </div>
+
+        <button class="btn btn-success" data-url="{{ path('recipe_research') }}">Rechercher une recette</button>
+
+        <h3>Recettes trouvées :</h3>
+        <ul>
+            {% for recipeData in recipes %}
+                <li>{{ recipeData.recipe.name }} - {{ recipeData.recipe.description }}</li>
+                <p>Score de correspondance : {{ recipeData.score }}</p>
+            {% else %}
+                <li>Aucune recette trouvée</li>
+            {% endfor %}
+
+        </ul>
+{% endblock %}
+
+    </div>

@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use  App\Enums\Allergy;
+use App\Enums\Allergy;
 use App\Repository\RecipeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -36,20 +36,22 @@ class Recipe
     /**
      * @var Collection<int, IngredientRecipe>
      */
-    #[ORM\ManyToMany(targetEntity: IngredientRecipe::class, inversedBy: 'Recipe')]
+    #[ORM\OneToMany(targetEntity: IngredientRecipe::class, mappedBy: 'recipe', cascade: ['persist', 'remove'])]
     private Collection $ingredientRecipe;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergy::class)]
+    #[ORM\ManyToOne(inversedBy: 'Recipes')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $user = null;
+
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Allergy::class)]    
     private ?array $allergys = null;
 
     #[ORM\Column(nullable: true, enumType: Diet::class)]
     private ?Diet $diet = null;
 
     #[ORM\Column(type: 'string')]
-    private string $imageLink;
+    private ?string $imageLink = '';
 
-    #[ORM\ManyToOne(inversedBy: 'recettes')]
-    private ?User $user = null;
 
     public function getImageLink(): string
     {
@@ -152,6 +154,7 @@ class Recipe
     {
         if (!$this->ingredientRecipe->contains($ingredientRecipe)) {
             $this->ingredientRecipe->add($ingredientRecipe);
+            $ingredientRecipe->setRecipe($this);
         }
 
         return $this;
@@ -159,7 +162,12 @@ class Recipe
 
     public function removeIngredientRecipe(IngredientRecipe $ingredientRecipe): static
     {
-        $this->ingredientRecipe->removeElement($ingredientRecipe);
+        if ($this->ingredientRecipe->removeElement($ingredientRecipe)) {
+            // Set the owning side to null (unless already changed)
+            if ($ingredientRecipe->getRecipe() === $this) {
+                $ingredientRecipe->setRecipe(null);
+            }
+        }
 
         return $this;
     }
@@ -204,4 +212,10 @@ class Recipe
 
         return $this;
     }
+
+    public function getIngredientNames(): array
+    {
+        return $this->ingredientRecipe->map(fn($ir) => $ir->getIngredient()->getName())->toArray();
+    }
+
 }

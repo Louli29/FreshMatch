@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Ingredient;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,6 +16,27 @@ class IngredientRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ingredient::class);
     }
+    
+    public function findSeasonIngredients($saison)
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.season LIKE :saison')
+            ->setParameter('saison', '%'.$saison.'%' )
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findIngredientsByUser(User $user): array
+    {
+        $qb = $this->createQueryBuilder('i')
+            ->select('i.name')
+            ->innerJoin('i.listIngrUsers', 'lu')
+            ->where('lu.user = :user')
+            ->setParameter('user', $user);
+
+        return array_column($qb->getQuery()->getResult(), 'name');
+    }
+
 
     //    /**
     //     * @return Ingredient[] Returns an array of Ingredient objects

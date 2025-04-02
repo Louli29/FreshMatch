@@ -5,8 +5,13 @@ namespace App\Enums;
 
 enum Diet : string {
 
-    case VEGETARIEN = 'vegetarien';
-    case VEGAN = 'vegan';
+    case VEGETARIEN = 'Végétarien';
+    case VEGAN = 'Vegan';
+
+
+
+
+
 }
 
 ?>

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ListIngrUser;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,6 +16,18 @@ class ListIngrUserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ListIngrUser::class);
     }
+
+    public function findUserPantryIngredients(User $user): array
+    {
+        $qb = $this->createQueryBuilder('lu')
+            ->select('i.name')
+            ->innerJoin('lu.ingredient', 'i')
+            ->where('lu.user = :user')
+            ->setParameter('user', $user);
+
+        return array_column($qb->getQuery()->getResult(), 'name');
+    }
+
 
     //    /**
     //     * @return ListIngrUser[] Returns an array of ListIngrUser objects
