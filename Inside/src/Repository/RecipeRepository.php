@@ -19,16 +19,16 @@ class RecipeRepository extends ServiceEntityRepository
     public function findSeasonRecipes(array $ingredientsDeSaison): array
     {
         return $this->createQueryBuilder('r')
-        // Jointure avec IngredientRecipe
+
         ->innerJoin('r.ingredientRecipe', 'ir')
-        // Jointure avec Ingredient
+
         ->innerJoin('ir.ingredient', 'i')
-        // Filtrer par les ingrédients de saison
+
         ->andWhere('i.id IN (:ingredients)')
         ->setParameter('ingredients', array_map(function($ingredient) {
             return $ingredient->getId();
         }, $ingredientsDeSaison))
-        // Retourner les résultats sous forme de tableau d'objets Recipe
+
         ->getQuery()
         ->getResult();
     }
@@ -37,16 +37,50 @@ class RecipeRepository extends ServiceEntityRepository
      */
     public function findByIngredients(array $ingredients): array
     {
+        $allIngredients = $this->findEquivalentIngredients($ingredients);
+
         $qb = $this->createQueryBuilder('r')
             ->innerJoin('r.ingredientRecipe', 'ir')
-            ->innerJoin('ir.ingredient', 'i');
-
-
-        $qb->where('i.name IN (:ingredients)')
-            ->setParameter('ingredients', $ingredients);
+            ->innerJoin('ir.ingredient', 'i')
+            ->where('i.name IN (:ingredients) OR (ir.remplacable = true AND i.name IN (:equivalentIngredients))')
+            ->setParameter('ingredients', $ingredients)
+            ->setParameter('equivalentIngredients', $allIngredients);
 
         return $qb->getQuery()->getResult();
     }
+
+
+
+    public function findEquivalentIngredients(array $ingredients): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+
+        $qb->select('DISTINCT i.typeIngredient')
+            ->from('App\Entity\Ingredient', 'i')
+            ->where('i.name IN (:ingredients)')
+            ->setParameter('ingredients', $ingredients);
+
+        $typeIngredients = array_column($qb->getQuery()->getResult(), 'typeIngredient');
+
+        if (empty($typeIngredients)) {
+            return $ingredients;
+        }
+
+
+        $qb2 = $this->getEntityManager()->createQueryBuilder();
+        $qb2->select('i.name')
+            ->from('App\Entity\Ingredient', 'i')
+            ->where('i.typeIngredient IN (:types)')
+            ->setParameter('types', $typeIngredients);
+
+        $equivalentIngredients = array_column($qb2->getQuery()->getResult(), 'name');
+
+        return array_merge($ingredients, $equivalentIngredients);
+    }
+
+
+
 
 
     //    /**
