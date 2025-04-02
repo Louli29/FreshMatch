@@ -6,6 +6,7 @@ use App\Entity\Ingredient;
 use App\Entity\User;
 
 
+use App\Enums\TypeIngredient;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
