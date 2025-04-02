@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Ingredient;
-use App\Enums\TypeIngredient;
+use App\Entity\User;
+
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -25,6 +27,18 @@ class IngredientRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findIngredientsByUser(User $user): array
+    {
+        $qb = $this->createQueryBuilder('i')
+            ->select('i.name')
+            ->innerJoin('i.listIngrUsers', 'lu')
+            ->where('lu.user = :user')
+            ->setParameter('user', $user);
+
+        return array_column($qb->getQuery()->getResult(), 'name');
+    }
+
 
 
     public function findDistinctIngredientTypes(): array

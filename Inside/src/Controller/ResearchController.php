@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Ingredient;
+use App\Entity\User;
 use App\Repository\IngredientRepository;
+use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,14 +17,47 @@ final class ResearchController extends AbstractController
 
 {
 
-    #[Route('/research', name: 'recipe_research', methods:['GET','POST'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    #[Route('/research', name: 'recipe_research', methods: ['GET', 'POST'])]
+    public function index(Request $request, RecipeRepository $recipeRepository, IngredientRepository $ingredientRepository): Response
     {
-        $ingredients = $entityManager->getRepository(Ingredient::class)->findBy(array(), array('id' => 'DESC'), 10);
+        $ingredientString = $request->query->get('ingredients', '');
+        $selectedIngredients = $ingredientString ? explode(',', $ingredientString) : [];
+        $selectedIngredients = array_map('trim', $selectedIngredients);
+
+
+        $user = $this->getUser();
+        $pantryIngredients = [];
+
+        if ($user instanceof \App\Entity\User && $user->getListIngredient()) {
+            $pantryIngredients = $user->getListIngredient()->getIngredient()->map(fn($ingredient) => $ingredient->getName())->toArray();
+        }
+
+
+        $recipes = [];
+        if (!empty($selectedIngredients) || !empty($pantryIngredients)) {
+            $recipes = $recipeRepository->findByIngredients(array_merge($selectedIngredients, $pantryIngredients));
+        }
+
+
+        $filteredRecipes = [];
+        foreach ($recipes as $recipe) {
+            $recipeIngredients = $recipe->getIngredientRecipe()->map(fn($ir) => $ir->getIngredient()->getName())->toArray();
+            $matchingIngredients = array_intersect($recipeIngredients, array_merge($selectedIngredients, $pantryIngredients));
+            $score = (count($matchingIngredients) / count($recipeIngredients)) * 100;
+
+            if ($score >= 33) {
+                $filteredRecipes[] = [
+                    'recipe' => $recipe,
+                    'score' => round($score) . '% de correspondance'
+                ];
+            }
+        }
+
         return $this->render('research/index.html.twig', [
-            'ingredients' => $ingredients,
+            'recipes' => $filteredRecipes,
         ]);
     }
+
 
     #[Route('/autocomplete/ingredients', name: 'autocomplete_ingredients')]
     public function autocomplete(Request $request, IngredientRepository $ingredientRepository): JsonResponse
