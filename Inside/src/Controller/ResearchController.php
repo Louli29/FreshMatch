@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Repository\IngredientRepository;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use JetBrains\PhpStorm\NoReturn;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,7 @@ final class ResearchController extends AbstractController
 
 {
 
-    #[Route('/research', name: 'recipe_research', methods: ['GET', 'POST'])]
+   #[Route('/research', name: 'recipe_research', methods: ['GET', 'POST'])]
     public function index(Request $request, RecipeRepository $recipeRepository, IngredientRepository $ingredientRepository): Response
     {
         $ingredientString = $request->query->get('ingredients', '');
@@ -60,10 +61,15 @@ final class ResearchController extends AbstractController
                 continue;
             }
 
-
-            if ($requiredDiet !== null && $recipe->getDiet() !== null && $recipe->getDiet() !== $requiredDiet) {
-                continue;
+            if($requiredDiet!==null){
+                if ( $recipe->getDiet() == null) {
+                    continue;
+                }
+                else if(  $recipe->getDiet() !== $requiredDiet){
+                    continue;
+                }
             }
+
 
             $matchingIngredients = array_intersect($recipeIngredients, array_merge($selectedIngredients, $pantryIngredients));
             $score = (count($matchingIngredients) / count($recipeIngredients)) * 100;
@@ -76,7 +82,7 @@ final class ResearchController extends AbstractController
                 ];
             }
         }
-        die;
+
 
 
         return $this->render('research/index.html.twig', [
