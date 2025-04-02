@@ -44,7 +44,7 @@ final class ResearchController extends AbstractController
             $pantryIngredients = $user->getListIngredient()->getIngredient()->map(fn($ingredient) => $ingredient->getName())->toArray();
         }
 
-        // Récupérer toutes les recettes qui correspondent aux ingrédients sélectionnés et aux ingrédients du placard
+
         $recipes = [];
         if (!empty($selectedIngredients) || !empty($pantryIngredients)) {
             $recipes = $recipeRepository->findByIngredients(array_merge($selectedIngredients, $pantryIngredients));
@@ -60,10 +60,15 @@ final class ResearchController extends AbstractController
                 continue;
             }
 
-
-            if ($requiredDiet !== null && $recipe->getDiet() !== null && $recipe->getDiet() !== $requiredDiet) {
-                continue;
+            if($requiredDiet !== null ){
+                if ( $recipe->getDiet() !== null ) {
+                    continue;
+                }
+                else if( $recipe->getDiet() !== $requiredDiet){
+                    continue;
+                }
             }
+
 
             $matchingIngredients = array_intersect($recipeIngredients, array_merge($selectedIngredients, $pantryIngredients));
             $score = (count($matchingIngredients) / count($recipeIngredients)) * 100;
@@ -76,7 +81,7 @@ final class ResearchController extends AbstractController
                 ];
             }
         }
-        die;
+
 
 
         return $this->render('research/index.html.twig', [
