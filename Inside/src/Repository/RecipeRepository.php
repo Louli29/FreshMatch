@@ -32,6 +32,22 @@ class RecipeRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
     }
+    /**
+     * Recherche des recettes en fonction des ingrédients donnés, y compris les ingrédients remplaçables.
+     */
+    public function findByIngredients(array $ingredients): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->innerJoin('r.ingredientRecipe', 'ir')
+            ->innerJoin('ir.ingredient', 'i');
+
+
+        $qb->where('i.name IN (:ingredients)')
+            ->setParameter('ingredients', $ingredients);
+
+        return $qb->getQuery()->getResult();
+    }
+
 
     //    /**
     //     * @return Recipe[] Returns an array of Recipe objects

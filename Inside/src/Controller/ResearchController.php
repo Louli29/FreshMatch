@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Ingredient;
 use App\Repository\IngredientRepository;
+use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,14 +16,33 @@ final class ResearchController extends AbstractController
 
 {
 
-    #[Route('/research', name: 'recipe_research', methods:['GET','POST'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    #[Route('/research', name: 'recipe_research', methods: ['GET', 'POST'])]
+    public function index(Request $request, RecipeRepository $recipeRepository): Response
     {
-        $ingredients = $entityManager->getRepository(Ingredient::class)->findBy(array(), array('id' => 'DESC'), 10);
+
+        $ingredientString = $request->query->get('ingredients','');
+
+        $selectedIngredients= $ingredientString ? explode(',', $ingredientString) : [];
+       /* if (!is_array($selectedIngredients)) {
+            $selectedIngredients = [$selectedIngredients];
+        }*/
+
+
+        $selectedIngredients = array_map('trim', $selectedIngredients);
+
+
+        $recipes = [];
+        if (!empty($selectedIngredients)) {
+            $recipes = $recipeRepository->findByIngredients($selectedIngredients);
+        }
+
+
         return $this->render('research/index.html.twig', [
-            'ingredients' => $ingredients,
+            'recipes' => $recipes,
         ]);
     }
+
+
 
     #[Route('/autocomplete/ingredients', name: 'autocomplete_ingredients')]
     public function autocomplete(Request $request, IngredientRepository $ingredientRepository): JsonResponse

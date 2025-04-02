@@ -60,7 +60,9 @@
                 const baseUrl = submitBtn.dataset.url;
                 console.log(baseUrl);
                 const params = new URLSearchParams();
-                selectedIngredients.forEach(name => params.append('ingredients[]', name));
+
+               // selectedIngredients.forEach(name => params.append('ingredients[]', name));
+                params.append('ingredients',selectedIngredients.join(','));
                 window.location.href = `${baseUrl}?${params.toString()}`;
             });
 
@@ -71,18 +73,25 @@
         <h2> Fais vibrer tes ingrédients !</h2>
         <h4>On évite la poubelle !</h4>
 
+
         <div class="research-box">
             <label for="search-input">Ajouter un ingrédient à la recherche</label>
             <input id="search-input" type="text" placeholder="Tomates, poulet..." />
-            <div id="pop-autocomplete">
-
+            <div id="pop-autocomplete"></div>
+            <div class="ingredients">
+                <div class="ingredient"></div>
             </div>
-           <div class="ingredients">
-               <div class="ingredient"></div>
-           </div>
         </div>
 
-            <button class="btn btn-success" data-url="{{ path('recipe_research') }}">Rechercher une recette</button>
-        </div>
+        <button class="btn btn-success" data-url="{{ path('recipe_research') }}">Rechercher une recette</button>
+
+        <h3>Recettes trouvées :</h3>
+        <ul>
+            {% for recipe in recipes %}
+                <li>{{ recipe.name }} - {{ recipe.description }}</li>
+            {% else %}
+                <li>Aucune recette trouvée</li>
+            {% endfor %}
+        </ul>
 {% endblock %}
 
