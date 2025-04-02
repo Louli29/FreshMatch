@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Ingredient;
+use App\Enums\TypeIngredient;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -24,6 +25,30 @@ class IngredientRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+
+    public function findDistinctIngredientTypes(): array
+    {
+        return $this->createQueryBuilder('i')
+            ->select('DISTINCT i.typeIngredient')
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
+    public function findByTypeIngredient(string $type): array
+    {
+        $typeEnum = TypeIngredient::tryFrom($type);
+        if (!$typeEnum) {
+            throw new \InvalidArgumentException("Type d'ingrédient invalide : $type");
+        }
+
+        return $this->createQueryBuilder('i')
+            ->where('i.typeIngredient = :type')
+            ->setParameter('type', $typeEnum)
+            ->getQuery()
+            ->getResult();
+    }
+
+
 
     //    /**
     //     * @return Ingredient[] Returns an array of Ingredient objects

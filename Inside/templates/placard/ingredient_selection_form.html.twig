@@ -1,0 +1,21 @@
+{% extends 'Main.html.twig' %}
+{% block main %}
+    <h2>Sélectionner des ingrédients ({{ type|capitalize }})</h2>
+    <form method="POST" action="{{ path('app_placard_add') }}">
+        <input type="hidden" name="type_ingredient" value="{{ type }}">
+
+        <ul>
+            {% for ingredient in ingredients %}
+                <li>
+                    <input type="checkbox" name="ingredients[]" value="{{ ingredient.id }}">
+                    {{ ingredient.name }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <button type="submit" class="btn btn-success">Valider la sélection</button>
+    </form>
+
+
+
+{% endblock %}
