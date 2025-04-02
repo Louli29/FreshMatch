@@ -87,11 +87,13 @@
 
         <h3>Recettes trouvées :</h3>
         <ul>
-            {% for recipe in recipes %}
-                <li>{{ recipe.name }} - {{ recipe.description }}</li>
+            {% for recipeData in recipes %}
+                <li>{{ recipeData.recipe.name }} - {{ recipeData.recipe.description }}</li>
+                <p>Score de correspondance : {{ recipeData.score }}</p>
             {% else %}
                 <li>Aucune recette trouvée</li>
             {% endfor %}
+
         </ul>
 {% endblock %}
 

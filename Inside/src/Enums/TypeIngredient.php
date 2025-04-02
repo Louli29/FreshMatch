@@ -6,7 +6,7 @@ enum TypeIngredient: string
 
 {
     case VIANDE = 'viande';
-    case POISSON = 'possion';
+    case POISSON = 'poisson';
     case EPICE = 'epice';
     case FECULENT = 'feculent';
     case FRUIT = 'fruit';

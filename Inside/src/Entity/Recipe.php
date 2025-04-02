@@ -212,4 +212,10 @@ class Recipe
 
         return $this;
     }
+
+    public function getIngredientNames(): array
+    {
+        return $this->ingredientRecipe->map(fn($ir) => $ir->getIngredient()->getName())->toArray();
+    }
+
 }
