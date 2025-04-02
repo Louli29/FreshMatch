@@ -24,26 +24,50 @@ final class ResearchController extends AbstractController
         $selectedIngredients = $ingredientString ? explode(',', $ingredientString) : [];
         $selectedIngredients = array_map('trim', $selectedIngredients);
 
-
         $user = $this->getUser();
         $pantryIngredients = [];
+        $excludedAllergies = [];
+        $requiredDiet = null;
+
+        // Si l'utilisateur est connecté
+        if ($user instanceof \App\Entity\User) {
+            // Récupération des allergies de l'utilisateur (converties en chaînes de caractères)
+            $excludedAllergies = array_map(fn($allergy) => $allergy->name, $user->getAllergy() ?? []);
+
+
+            $requiredDiet = $user->getDiet();
+
+        }
+
 
         if ($user instanceof \App\Entity\User && $user->getListIngredient()) {
             $pantryIngredients = $user->getListIngredient()->getIngredient()->map(fn($ingredient) => $ingredient->getName())->toArray();
         }
 
-
+        // Récupérer toutes les recettes qui correspondent aux ingrédients sélectionnés et aux ingrédients du placard
         $recipes = [];
         if (!empty($selectedIngredients) || !empty($pantryIngredients)) {
             $recipes = $recipeRepository->findByIngredients(array_merge($selectedIngredients, $pantryIngredients));
         }
 
-
         $filteredRecipes = [];
         foreach ($recipes as $recipe) {
+
             $recipeIngredients = $recipe->getIngredientRecipe()->map(fn($ir) => $ir->getIngredient()->getName())->toArray();
+
+            $recipeAllergies = array_map(fn($allergy) => $allergy->name, $recipe->getAllergys() ?? []);
+            if (!empty(array_intersect($recipeAllergies, $excludedAllergies))) {
+                continue;
+            }
+
+
+            if ($requiredDiet !== null && $recipe->getDiet() !== null && $recipe->getDiet() !== $requiredDiet) {
+                continue;
+            }
+
             $matchingIngredients = array_intersect($recipeIngredients, array_merge($selectedIngredients, $pantryIngredients));
             $score = (count($matchingIngredients) / count($recipeIngredients)) * 100;
+
 
             if ($score >= 33) {
                 $filteredRecipes[] = [
@@ -52,11 +76,14 @@ final class ResearchController extends AbstractController
                 ];
             }
         }
+        die;
+
 
         return $this->render('research/index.html.twig', [
             'recipes' => $filteredRecipes,
         ]);
     }
+
 
 
     #[Route('/autocomplete/ingredients', name: 'autocomplete_ingredients')]
