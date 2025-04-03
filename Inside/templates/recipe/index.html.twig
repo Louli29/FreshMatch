@@ -1,71 +1,54 @@
 {% extends 'Main.html.twig' %}
 
-{% block title %}Recipe index{% endblock %}
+{% block title %}Recipe Index{% endblock %}
 
 {% block main %}
-    <h1>Recipe index</h1>
+    <div class="text-center my-5">
+        <h1>Mes recettes</h1>
+    </div>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Time</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Step</th>
-            <th>NbPerson</th>
-            <th>Allergys</th>
-            <th>Diet</th>
-            <th>ImageLink</th>
-            <th>actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for recipe in recipes %}
-            <tr>
-                <td>{{ recipe.id }}</td>
-                <td>{{ recipe.time }}</td>
-                <td>{{ recipe.name }}</td>
-                <td>{{ recipe.description }}</td>
-                <td>{{ recipe.step }}</td>
-                <td>{{ recipe.nbPerson }}</td>
+    <div class="container">
+        <div class="row">
+            {% for recipe in recipes %}
+                <div class="col-12 mb-4">
+                    <div class="card d-flex flex-row shadow-sm">
+                        <img src="{{ recipe.imageLink != '' ? recipe.imageLink : 'https://via.placeholder.com/150' }}" class="card-img-left" alt="{{ recipe.name }}" style="width: 150px; height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ recipe.name }}</h5>
+                            <p class="card-text">{{ recipe.description | slice(0, 100) }}...</p>
 
-                <td>
-                    {% if recipe.allergys is not empty %}
-                        {{ recipe.allergys|map(a => a.value)|join(', ') }}
-                    {% else %}
-                        Aucune allergie définie
-                    {% endif %}
-                </td>
+                            <ul class="list-unstyled">
+                                <li><strong>Time:</strong> {{ recipe.time }} minutes</li>
+                                <li><strong>Steps:</strong> {{ recipe.step | slice(0, 100) }}...</li>
+                                <li><strong>Serves:</strong> {{ recipe.nbPerson }} people</li>
+                                <li><strong>Diet:</strong> {{ recipe.diet ? recipe.diet.value : 'No diet specified' }}</li>
+                                <li><strong>Allergies:</strong> 
+                                    {% if recipe.allergys is not empty %}
+                                        {{ recipe.allergys | map(a => a.value) | join(', ') }}
+                                    {% else %}
+                                        No allergies specified
+                                    {% endif %}
+                                </li>
+                            </ul>
 
-                <td>
-                    {% if recipe.diet %}
-                        {{ recipe.diet.value }}
-                    {% else %}
-                        Aucun régime alimentaire défini
-                    {% endif %}
-                </td>
+                            <div class="d-flex justify-content-start gap-2">
+                                <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}" class="btn btn-primary btn-sm">Show</a>
+                                <a href="{{ path('app_recipe_edit', {'id': recipe.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-warning" role="alert">
+                        No recipes found.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
-                <td>
-                    {% if recipe.imageLink != '' %}
-                        {{ recipe.imageLink }}
-                    {% else %}
-                        Aucune image définie
-                    {% endif %}
-                </td>
-
-                <td>
-                    <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}">show</a>
-                    <a href="{{ path('app_recipe_edit', {'id': recipe.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">No records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_recipe_new') }}">Create new</a>
+        <div class="text-center mt-4 pb-4">
+            <a href="{{ path('app_recipe_new') }}" class="btn btn-success btn-lg">Create New Recipe</a>
+        </div>
+    </div>
 {% endblock %}

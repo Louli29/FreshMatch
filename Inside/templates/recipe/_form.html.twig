@@ -1,15 +1,17 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="form-container">
-                {{ form_start(form) }}
-                    <div class="row">
-                        <div class="col-md-12">
+            <div class="card p-4 shadow-sm">
+                <div class="card-body">
+                    {{ form_start(form) }}
+
+                    <div class="mb-3">
+                        <div class="form-floating">
                             {{ form_row(form.name) }}
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col-md-6">
                             {{ form_row(form.allergys) }}
                         </div>
@@ -18,19 +20,19 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
+                    <div class="mb-3">
+                        <div class="form-floating">
                             {{ form_row(form.ingredientRecipe) }}
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
+                    <div class="mb-3">
+                        <div class="form-floating">
                             {{ form_row(form.step) }}
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col-md-6">
                             {{ form_row(form.time) }}
                         </div>
@@ -39,14 +41,14 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
+                    <div class="mb-3">
+                        <div class="form-floating">
                             {{ form_row(form.description) }}
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
+                    <div class="mb-3">
+                        <div class="form-floating">
                             {{ form_row(form.imageLink) }}
                         </div>
                     </div>
@@ -54,17 +56,26 @@
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-success btn-lg">Sauvegarder</button>
                     </div>
-                {{ form_end(form) }}
+
+                    {{ form_end(form) }}
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    .form-container {
-        background-color: #F2DAB4;
-        padding: 30px;
+    .card {
+        background-color: #D4B585;
         border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-floating label {
+        color:rgb(0, 0, 0);
+    }
+
+    .btn-success {
+        padding: 12px 30px;
+        font-size: 18px;
     }
 </style>
