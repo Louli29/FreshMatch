@@ -1,151 +1,170 @@
 {% block stylesheets %}
-    <style>
-        .form-container {
-            background-color: #F2DAB4;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+	<style>
+		.form-container {
+			background-color: #F2DAB4;
+			padding: 30px;
+			border-radius: 15px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
 
-        .no-border-table th, .no-border-table td {
-            border: none;
-        }
+		.no-border-table th,
+		.no-border-table td {
+			border: none;
+		}
 
-        h2 {
-            margin-bottom: 15px;
-            text-align: center; 
-        }
-    </style>
+		h2 {
+			margin-bottom: 15px;
+			text-align: center;
+		}
+	</style>
 {% endblock %}
 
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6">
-            <h2>Mes informations</h2>
-            <div class="form-container">
-                <table class="table table-hover no-border-table">
-                    <tbody>
-                        <tr>
-                            <th scope="row">Nom</th>
-                            <td>{{ user.name }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Email</th>
-                            <td>{{ user.email }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Régime alimentaire</th>
-                            <td>
-                                {% if user.diet %}
-                                    {{ user.diet.value }}
-                                {% else %}
-                                    Aucun régime alimentaire défini
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Allergies</th>
-                            <td>
-                                {% if user.allergy %}
-                                    {{ user.allergy|map(a => a.value)|join(', ') }}
-                                {% else %}
-                                    Aucune allergie définie
-                                {% endif %}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+	<div class="row">
+		<div class="col-md-6">
+			<h2>Mes informations</h2>
+			<div class="form-container">
+				<table class="table table-hover no-border-table">
+					<tbody>
+						<tr>
+							<th scope="row">Nom</th>
+							<td>{{ user.name }}</td>
+						</tr>
+						<tr>
+							<th scope="row">Email</th>
+							<td>{{ user.email }}</td>
+						</tr>
+						<tr>
+							<th scope="row">Régime alimentaire</th>
+							<td>
+								{% if user.diet %}
+									{{ user.diet.value }}
+								{% else %}
+									Aucun régime alimentaire défini
+								{% endif %}
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Allergies</th>
+							<td>
+								{% if user.allergy %}
+									{{ user.allergy|map(a => a.value)|join(', ') }}
+								{% else %}
+									Aucune allergie définie
+								{% endif %}
+							</td>
+						</tr>
+					</tbody>
+				</table>
 
-                <div class="text-center mt-3">
-                    <a href="{{ path('app_user_show', { 'id': user.id }) }}" class="btn btn-primary rounded">Voir toutes mes informations</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-    <h2>Mon placard</h2>
-    <div class="form-container">
-        {% if listIngrUser.ingredient|length > 0 %}
-            <table class="table table-hover no-border-table">
-                <thead>
-                    <tr>
-                        <th>Nom de l'ingrédient</th>
-                        <th>Type</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for ingredient in listIngrUser.ingredient %}
-                        <tr id="ingredient-{{ ingredient.id }}">
-                            <td>{{ ingredient.name }}</td>
-                            <td>{{ ingredient.typeIngredient.value|capitalize }}</td>
-                            <td>
-                                <form method="POST" action="{{ path('app_placard_remove') }}" class="delete-ingredient-form">
-                                    <input type="hidden" name="ingredient_id" value="{{ ingredient.id }}">
-                                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p class="alert alert-info text-center">Aucun ingrédient dans votre placard pour le moment.</p>
-        {% endif %}
-
-        <div class="text-center mt-4">
-            <form method="GET" action="{{ path('app_placard_select') }}">
-                <label for="type_ingredient">Choisir un type d'ingrédient :</label>
-                <select name="type_ingredient" id="type_ingredient" class="form-control mb-3"> 
-                    <option value="" disabled selected>Sélectionner un type</option>
-                    {% for type in typeIngredients %}
-                        <option value="{{ type.value }}">{{ type.value|capitalize }}</option>
-                    {% endfor %}
-                </select>
-                <button id="show-add-ingredient" class="btn btn-success rounded-pill px-4 py-2">Valider</button> 
-            </form>
-        </div>
-    </div>
-</div>
+				<div class="text-center mt-3">
+					<a href="{{ path('app_user_show', { 'id': user.id }) }}" class="btn btn-primary rounded">Voir toutes mes informations</a>
+				</div>
+			</div>
 
 
-<script>
-    document.getElementById('ingredient-type').addEventListener('change', function() {
-        let type = this.value;
-        if (!type) return;
+			<div class="text-center mt-4">
 
-        fetch(`/placard/select/${type}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.html) {
-                    document.getElementById('ingredient-selection-form').innerHTML = data.html;
-                }
-            })
-            .catch(error => console.error('Erreur :', error));
-    });
+				<div class="mb-3">
+					<a href="{{ path('app_recipe_new') }}">
+						<button class="btn btn-success">Créer une recette</button>
+					</a>
+				</div>
 
-    document.querySelectorAll('.delete-ingredient-form').forEach(form => {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
+				<div class="mb-3">
+					<a href="{{ path('app_recipe_index') }}">
+						<button class="btn btn-success">Voir mes recettes</button>
+					</a>
+				</div>
 
-            let formData = new FormData(this);
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('ingredient-' + data.ingredientId).remove();
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch(error => console.error('Erreur:', error));
-        });
-    });
-</script>
+				<div class="mb-3">
+					<a href="{{ path('app_user_delete', {'id': user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ?');">
+						<button class="btn btn-danger">Supprimer mon compte</button>
+					</a>
+				</div>
+			</div>
 
 
+		</div>
+
+		<div class="col-md-6">
+			<h2>Mon placard</h2>
+			<div class="form-container">
+				{% if listIngrUser.ingredient|length > 0 %}
+					<table class="table table-hover no-border-table">
+						<thead>
+							<tr>
+								<th>Nom de l'ingrédient</th>
+								<th>Type</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for ingredient in listIngrUser.ingredient %}
+								<tr id="ingredient-{{ ingredient.id }}">
+									<td>{{ ingredient.name }}</td>
+									<td>{{ ingredient.typeIngredient.value|capitalize }}</td>
+									<td>
+										<form method="POST" action="{{ path('app_placard_remove') }}" class="delete-ingredient-form">
+											<input type="hidden" name="ingredient_id" value="{{ ingredient.id }}">
+											<button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				{% else %}
+					<p class="alert alert-info text-center">Aucun ingrédient dans votre placard pour le moment.</p>
+				{% endif %}
+
+				<div class="text-center mt-4">
+					<form method="GET" action="{{ path('app_placard_select') }}">
+						<label for="type_ingredient">Choisir un type d'ingrédient :</label>
+						<select name="type_ingredient" id="type_ingredient" class="form-control mb-3">
+							<option value="" disabled selected>Sélectionner un type</option>
+							{% for type in typeIngredients %}
+								<option value="{{ type.value }}">{{ type.value|capitalize }}</option>
+							{% endfor %}
+						</select>
+						<button id="show-add-ingredient" class="btn btn-success rounded-pill px-4 py-2">Valider</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+		<script>
+			document.getElementById('ingredient-type').addEventListener('change', function () {
+let type = this.value;
+if (! type) 
+return;
+
+
+fetch(`/placard/select/${type}`).then(response => response.json()).then(data => {
+if (data.html) {
+document.getElementById('ingredient-selection-form').innerHTML = data.html;
+}
+}).catch(error => console.error('Erreur :', error));
+});
+
+document.querySelectorAll('.delete-ingredient-form').forEach(form => {
+form.addEventListener('submit', function (event) {
+event.preventDefault();
+
+let formData = new FormData(this);
+fetch(this.action, {
+method: 'POST',
+body: formData,
+headers: {
+'X-Requested-With': 'XMLHttpRequest'
+}
+}).then(response => response.json()).then(data => {
+if (data.success) {
+document.getElementById('ingredient-' + data.ingredientId).remove();
+} else {
+alert(data.message);
+}
+}).catch(error => console.error('Erreur:', error));
+});
+});
+		</script>
