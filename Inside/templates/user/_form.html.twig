@@ -1,39 +1,71 @@
 {% block content %}
     <div class="container">
-    
         <div class="form-container">
 
             {{ form_start(form) }}
-                <div class="mb-3">
-                    {{ form_row(form.name) }}
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.name.vars.id }}" class="form-label">Nom</label>
+                        {{ form_widget(form.name, { 'attr': { 'class': 'form-control' } }) }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.Email.vars.id }}" class="form-label">Email</label>
+                        {{ form_widget(form.Email, { 'attr': { 'class': 'form-control' } }) }}
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    {{ form_row(form.Email) }}
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="{{ form.plainPassword.vars.id }}" class="form-label">Mot de passe</label>
+                        {{ form_widget(form.plainPassword, { 'attr': { 'class': 'form-control' } }) }}
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    {{ form_row(form.plainPassword) }}
+                <!-- Régime alimentaire -->
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="{{ form.diet.vars.id }}" class="form-label">Régime alimentaire</label>
+                        <div class="d-flex justify-content-start">
+                            {% for choice in form.diet %}
+                                <div class="form-check me-4">
+                                    {{ form_widget(choice, { 'attr': { 'class': 'form-check-input' } }) }}
+                                    <label class="form-check-label" for="{{ choice.vars.id }}">
+                                        {{ choice.vars.label }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    {{ form_row(form.diet) }}
+                <!-- Allergies -->
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="{{ form.allergy.vars.id }}" class="form-label">Allergies</label>
+                        <div class="d-flex flex-wrap">
+                            {% for choice in form.allergy %}
+                                <div class="form-check me-3">
+                                    {{ form_widget(choice, { 'attr': { 'class': 'form-check-input' } }) }}
+                                    <label class="form-check-label" for="{{ choice.vars.id }}">
+                                        {{ choice.vars.label }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    {{ form_row(form.allergy) }}
+                <div class="mb-3 text-center">
+                    <button type="submit" class="btn btn-success btn-lg px-4">
+                        {{ button_label|default("S'inscrire") }}
+                    </button>
                 </div>
-
-            <div class="mb-3 text-center">
-                <button type="submit" class="btn btn-success">
-                    {{ button_label|default("S'inscrire") }}
-                </button>
-            </div>
+                
             {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}
-
 
 {% block stylesheets %}
     <style>
@@ -43,5 +75,36 @@
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .form-check-input {
+            border-radius: 5px;
+        }
+
+        .form-check-label {
+            margin-left: 5px;
+        }
+
+        .form-text {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .btn-success {
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
     </style>
 {% endblock %}
