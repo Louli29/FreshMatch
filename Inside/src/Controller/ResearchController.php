@@ -29,11 +29,10 @@ final class ResearchController extends AbstractController
         $excludedAllergies = [];
         $requiredDiet = null;
 
-        // Si l'utilisateur est connecté
-        if ($user instanceof \App\Entity\User) {
-            // Récupération des allergies de l'utilisateur (converties en chaînes de caractères)
-            $excludedAllergies = array_map(fn($allergy) => $allergy->name, $user->getAllergy() ?? []);
 
+        if ($user instanceof \App\Entity\User) {
+
+            $excludedAllergies = array_map(fn($allergy) => $allergy->name, $user->getAllergy() ?? []);
 
             $requiredDiet = $user->getDiet();
 
@@ -55,20 +54,22 @@ final class ResearchController extends AbstractController
 
             $recipeIngredients = $recipe->getIngredientRecipe()->map(fn($ir) => $ir->getIngredient()->getName())->toArray();
 
-            $recipeAllergies = array_map(fn($allergy) => $allergy->name, $recipe->getAllergys() ?? []);
+            $allergies = $recipe->getAllergys();
+            $recipeAllergies = is_array($allergies)
+                ? array_map(fn($allergy) => $allergy->name, $allergies)
+                : [];
+
 
             if (!empty(array_intersect($recipeAllergies, $excludedAllergies))) {
                 continue;
             }
 
-            if($requiredDiet !== null ){
-                if ( $recipe->getDiet() !== null ) {
-                    continue;
-                }
-                else if( $recipe->getDiet() !== $requiredDiet){
+            if ($requiredDiet !== null) {
+                if ($recipe->getDiet() === null || $recipe->getDiet() !== $requiredDiet) {
                     continue;
                 }
             }
+
 
 
             $matchingIngredients = array_intersect($recipeIngredients, array_merge($selectedIngredients, $pantryIngredients));
