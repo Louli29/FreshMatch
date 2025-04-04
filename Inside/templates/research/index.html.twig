@@ -94,7 +94,9 @@
             {% for recipeData in recipes %}
                 <li class="list-group-item">
                     <strong>{{ recipeData.recipe.name }}</strong> - {{ recipeData.recipe.description }}
-                    <p>Score de correspondance : {{ recipeData.score }}</p>
+                    <p>Voyons si ça match: {{ recipeData.score }}
+                        <a href="{{ path('app_recipe_show', {'id': recipeData.recipe.id}) }}" class="btn btn-success btn-lg">Voir la recette</a>
+                    </p>
                 </li>
             {% else %}
                 <li class="list-group-item">Aucune recette trouvée</li>

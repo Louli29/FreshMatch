@@ -17,7 +17,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 #[Route('/recipe')]
 final class RecipeController extends AbstractController
 {
-    public function __construct(private Security $security) {}
+
 
     #[Route(name: 'app_recipe_index', methods: ['GET'])]
     public function index(RecipeRepository $recipeRepository): Response
@@ -30,7 +30,7 @@ final class RecipeController extends AbstractController
     #[Route('/result', name: 'app_recipe_search', methods: ['GET'])]
     public function search(Request $request, EntityManagerInterface $em): Response
     {
-        $ingredientNames = $request->query->all('ingredients'); // ['Tomate', 'Poulet', etc.]
+        $ingredientNames = $request->query->all('ingredients');
 
         if (empty($ingredientNames)) {
             return $this->redirectToRoute('app_recipe_index');
