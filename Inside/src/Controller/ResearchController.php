@@ -56,6 +56,7 @@ final class ResearchController extends AbstractController
             $recipeIngredients = $recipe->getIngredientRecipe()->map(fn($ir) => $ir->getIngredient()->getName())->toArray();
 
             $recipeAllergies = array_map(fn($allergy) => $allergy->name, $recipe->getAllergys() ?? []);
+
             if (!empty(array_intersect($recipeAllergies, $excludedAllergies))) {
                 continue;
             }
