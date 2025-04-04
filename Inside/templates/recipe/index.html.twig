@@ -4,7 +4,7 @@
 
 {% block main %}
     <div class="text-center my-5">
-        <h1>Mes recettes</h1>
+        <h1>Les recettes</h1>
     </div>
 
     <div class="container">
@@ -18,22 +18,21 @@
                             <p class="card-text">{{ recipe.description | slice(0, 100) }}...</p>
 
                             <ul class="list-unstyled">
-                                <li><strong>Time:</strong> {{ recipe.time }} minutes</li>
-                                <li><strong>Steps:</strong> {{ recipe.step | slice(0, 100) }}...</li>
-                                <li><strong>Serves:</strong> {{ recipe.nbPerson }} people</li>
-                                <li><strong>Diet:</strong> {{ recipe.diet ? recipe.diet.value : 'No diet specified' }}</li>
-                                <li><strong>Allergies:</strong> 
+                                <li><strong>Temps :</strong> {{ recipe.time }} minutes</li>
+                                <li><strong>Etapes :</strong> {{ recipe.step | slice(0, 100) }}...</li>
+                                <li><strong>Nombre de personne :</strong> {{ recipe.nbPerson }} personnes</li>
+                                <li><strong>Régime alimentaire :</strong> {{ recipe.diet ? recipe.diet.value : 'Aucun régime alimentaire' }}</li>
+                                <li><strong>Allergies :</strong> 
                                     {% if recipe.allergys is not empty %}
                                         {{ recipe.allergys | map(a => a.value) | join(', ') }}
                                     {% else %}
-                                        No allergies specified
+                                        Aucune allergie
                                     {% endif %}
                                 </li>
                             </ul>
 
                             <div class="d-flex justify-content-start gap-2">
-                                <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}" class="btn btn-primary btn-sm">Show</a>
-                                <a href="{{ path('app_recipe_edit', {'id': recipe.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}" class="btn btn-primary btn-sm">Afficher la recette</a>
                             </div>
                         </div>
                     </div>
@@ -41,14 +40,14 @@
             {% else %}
                 <div class="col-12">
                     <div class="alert alert-warning" role="alert">
-                        No recipes found.
+                        Aucune recette trouvée.
                     </div>
                 </div>
             {% endfor %}
         </div>
 
         <div class="text-center mt-4 pb-4">
-            <a href="{{ path('app_recipe_new') }}" class="btn btn-success btn-lg">Create New Recipe</a>
+            <a href="{{ path('home_page') }}" class="btn btn-success btn-lg">Retourner à la page d'accueil</a>
         </div>
     </div>
 {% endblock %}
