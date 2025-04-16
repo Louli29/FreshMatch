@@ -6,6 +6,7 @@ use App\Entity\Ingredient;
 use App\Entity\User;
 use App\Repository\IngredientRepository;
 use App\Repository\RecipeRepository;
+use App\Service\Score;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,7 +19,7 @@ final class ResearchController extends AbstractController
 {
 
     #[Route('/research', name: 'recipe_research', methods: ['GET', 'POST'])]
-    public function index(Request $request, RecipeRepository $recipeRepository, IngredientRepository $ingredientRepository): Response
+    public function index(Request $request, RecipeRepository $recipeRepository,  Score $score): Response
     {
         $ingredientString = $request->query->get('ingredients', '');
         $selectedIngredients = $ingredientString ? explode(',', $ingredientString) : [];
@@ -33,11 +34,9 @@ final class ResearchController extends AbstractController
         if ($user instanceof \App\Entity\User) {
 
             $excludedAllergies = array_map(fn($allergy) => $allergy->name, $user->getAllergy() ?? []);
-
             $requiredDiet = $user->getDiet();
 
         }
-
 
         if ($user instanceof \App\Entity\User && $user->getListIngredient()) {
             $pantryIngredients = $user->getListIngredient()->getIngredient()->map(fn($ingredient) => $ingredient->getName())->toArray();
@@ -51,8 +50,6 @@ final class ResearchController extends AbstractController
 
         $filteredRecipes = [];
         foreach ($recipes as $recipe) {
-
-            $recipeIngredients = $recipe->getIngredientRecipe()->map(fn($ir) => $ir->getIngredient()->getName())->toArray();
 
             $allergies = $recipe->getAllergys();
             $recipeAllergies = is_array($allergies)
@@ -70,9 +67,7 @@ final class ResearchController extends AbstractController
                 }
             }
 
-
-            $matchingIngredients = array_intersect($recipeIngredients, array_merge($selectedIngredients, $pantryIngredients));
-            $score = (count($matchingIngredients) / count($recipeIngredients)) * 100;
+            $score = $score->getScore($recipe, $selectedIngredients, $pantryIngredients);
 
             if ($score >= 33) {
                 $filteredRecipes[] = [
