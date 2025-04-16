@@ -71,10 +71,8 @@ final class ResearchController extends AbstractController
             }
 
 
-
             $matchingIngredients = array_intersect($recipeIngredients, array_merge($selectedIngredients, $pantryIngredients));
             $score = (count($matchingIngredients) / count($recipeIngredients)) * 100;
-
 
             if ($score >= 33) {
                 $filteredRecipes[] = [
@@ -83,8 +81,6 @@ final class ResearchController extends AbstractController
                 ];
             }
         }
-
-
 
         return $this->render('research/index.html.twig', [
             'recipes' => $filteredRecipes,
