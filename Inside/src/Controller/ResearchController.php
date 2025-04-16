@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Repository\IngredientRepository;
 use App\Repository\RecipeRepository;
 use App\Service\Score;
+use App\Service\UserPreferences;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,7 +20,7 @@ final class ResearchController extends AbstractController
 {
 
     #[Route('/research', name: 'recipe_research', methods: ['GET', 'POST'])]
-    public function index(Request $request, RecipeRepository $recipeRepository,  Score $score): Response
+    public function index(Request $request, RecipeRepository $recipeRepository,  Score $score, UserPreferences $preferences): Response
     {
         $ingredientString = $request->query->get('ingredients', '');
         $selectedIngredients = $ingredientString ? explode(',', $ingredientString) : [];
@@ -30,16 +31,10 @@ final class ResearchController extends AbstractController
         $excludedAllergies = [];
         $requiredDiet = null;
 
-
-        if ($user instanceof \App\Entity\User) {
-
-            $excludedAllergies = array_map(fn($allergy) => $allergy->name, $user->getAllergy() ?? []);
-            $requiredDiet = $user->getDiet();
-
-        }
-
         if ($user instanceof \App\Entity\User && $user->getListIngredient()) {
-            $pantryIngredients = $user->getListIngredient()->getIngredient()->map(fn($ingredient) => $ingredient->getName())->toArray();
+            $pantryIngredients = $preferences->getPantry($user);
+            $excludedAllergies = $preferences->getAllergy($user);
+            $requiredDiet = $preferences->getDiets($user);
         }
 
 
