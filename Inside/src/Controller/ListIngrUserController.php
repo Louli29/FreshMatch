@@ -19,7 +19,7 @@ final class ListIngrUserController extends AbstractController
     {
         $term = $request->query->get('term', '');
 
-        // Chercher les ingrédients qui commencent par la saisie de l'utilisateur
+
         $ingredients = $em->getRepository(Ingredient::class)->createQueryBuilder('i')
             ->where('i.name LIKE :term')
             ->setParameter('term', $term . '%')
@@ -27,7 +27,7 @@ final class ListIngrUserController extends AbstractController
             ->getQuery()
             ->getResult();
 
-        // Transformer en tableau JSON
+
         $results = [];
         foreach ($ingredients as $ingredient) {
             $results[] = [
@@ -54,12 +54,12 @@ final class ListIngrUserController extends AbstractController
             return $this->json(['error' => 'ID ingrédient manquant'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Récupérer l'ingrédient
+
         $ingredient = $em->getRepository(Ingredient::class)->find($ingredientId);
         if (!$ingredient) {
             return $this->json(['error' => 'Ingrédient introuvable'], Response::HTTP_NOT_FOUND);
         }
-        // Vérifier si l'utilisateur a déjà une liste d'ingrédients
+
         $listIngrUser = $user->getListIngredient();
         if (!$listIngrUser) {
             $listIngrUser = new ListIngrUser();
@@ -67,7 +67,7 @@ final class ListIngrUserController extends AbstractController
             $em->persist($listIngrUser);
         }
 
-        // Ajouter l'ingrédient s'il n'est pas déjà dans la liste
+
         if (!$listIngrUser->getIngredient()->contains($ingredient)) {
             $listIngrUser->addIngredient($ingredient);
             $em->persist($listIngrUser);

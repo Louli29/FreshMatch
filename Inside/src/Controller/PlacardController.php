@@ -113,14 +113,13 @@ class PlacardController extends AbstractController
         if ($listIngrUser && $listIngrUser->getIngredient()->contains($ingredient)) {
             $listIngrUser->removeIngredient($ingredient);
             $em->flush();
-            $this->addFlash('success', 'Ingrédients ajoutés à votre placard !');
             return $this->redirectToRoute('app_user_account', ['id' => $user->getId()]);
         }
 
         return $this->redirectToRoute('app_user_account', ['id' => $user->getId()]);
     }
 
-
+//inutile je crois
     public function account(User $user, EntityManagerInterface $em): \Symfony\Component\HttpFoundation\Response
     {
 

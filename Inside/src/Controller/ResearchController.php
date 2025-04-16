@@ -6,6 +6,9 @@ use App\Entity\Ingredient;
 use App\Entity\User;
 use App\Repository\IngredientRepository;
 use App\Repository\RecipeRepository;
+use App\Service\RecipeFilter;
+use App\Service\Score;
+use App\Service\UserPreferences;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,7 +21,7 @@ final class ResearchController extends AbstractController
 {
 
     #[Route('/research', name: 'recipe_research', methods: ['GET', 'POST'])]
-    public function index(Request $request, RecipeRepository $recipeRepository, IngredientRepository $ingredientRepository): Response
+    public function index(Request $request, RecipeRepository $recipeRepository,  Score $score, UserPreferences $preferences, RecipeFilter $filter): Response
     {
         $ingredientString = $request->query->get('ingredients', '');
         $selectedIngredients = $ingredientString ? explode(',', $ingredientString) : [];
@@ -29,69 +32,23 @@ final class ResearchController extends AbstractController
         $excludedAllergies = [];
         $requiredDiet = null;
 
-
-        if ($user instanceof \App\Entity\User) {
-
-            $excludedAllergies = array_map(fn($allergy) => $allergy->name, $user->getAllergy() ?? []);
-
-            $requiredDiet = $user->getDiet();
-
-        }
-
-
         if ($user instanceof \App\Entity\User && $user->getListIngredient()) {
-            $pantryIngredients = $user->getListIngredient()->getIngredient()->map(fn($ingredient) => $ingredient->getName())->toArray();
+            $pantryIngredients = $preferences->getPantry($user);
+            $excludedAllergies = $preferences->getAllergy($user);
+            $requiredDiet = $preferences->getDiets($user);
         }
-
 
         $recipes = [];
         if (!empty($selectedIngredients) || !empty($pantryIngredients)) {
             $recipes = $recipeRepository->findByIngredients(array_merge($selectedIngredients, $pantryIngredients));
         }
 
-        $filteredRecipes = [];
-        foreach ($recipes as $recipe) {
-
-            $recipeIngredients = $recipe->getIngredientRecipe()->map(fn($ir) => $ir->getIngredient()->getName())->toArray();
-
-            $allergies = $recipe->getAllergys();
-            $recipeAllergies = is_array($allergies)
-                ? array_map(fn($allergy) => $allergy->name, $allergies)
-                : [];
-
-
-            if (!empty(array_intersect($recipeAllergies, $excludedAllergies))) {
-                continue;
-            }
-
-            if ($requiredDiet !== null) {
-                if ($recipe->getDiet() === null || $recipe->getDiet() !== $requiredDiet) {
-                    continue;
-                }
-            }
-
-
-
-            $matchingIngredients = array_intersect($recipeIngredients, array_merge($selectedIngredients, $pantryIngredients));
-            $score = (count($matchingIngredients) / count($recipeIngredients)) * 100;
-
-
-            if ($score >= 33) {
-                $filteredRecipes[] = [
-                    'recipe' => $recipe,
-                    'score' => round($score) . '% de correspondance'
-                ];
-            }
-        }
-
-
+       $filteredRecipes = $filter->filter($recipes, $selectedIngredients, $excludedAllergies, $requiredDiet, $pantryIngredients, $score);
 
         return $this->render('research/index.html.twig', [
             'recipes' => $filteredRecipes,
         ]);
     }
-
-
 
     #[Route('/autocomplete/ingredients', name: 'autocomplete_ingredients')]
     public function autocomplete(Request $request, IngredientRepository $ingredientRepository): JsonResponse
