@@ -130,7 +130,4 @@ class PlacardController extends AbstractController
             'typeIngredients' => $typeIngredients,
         ]);
     }
-
-
-
 }

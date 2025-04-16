@@ -19,8 +19,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 
-
-
 #[Route('/user')]
 final class UserController extends AbstractController
 {
@@ -43,9 +41,7 @@ final class UserController extends AbstractController
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -58,8 +54,6 @@ final class UserController extends AbstractController
             'form' => $form,
         ]);
     }
-
-
 
     #[Route('/{id}', name: 'app_user_account', methods: ['GET', 'POST'])]
     public function account(User $user, Request $request, EntityManagerInterface $em): Response
@@ -83,29 +77,10 @@ final class UserController extends AbstractController
         ]);
     }
 
-//    #[Route('/ingredient/delete/{id}', name: 'app_user_delete_ingredient', methods: ['POST'])]
-//    public function deleteIngredient(int $id, EntityManagerInterface $em, UserRepository $userRepository, IngredientRepository $ingredientRepository): JsonResponse
-//    {
-//        $user = $this->getUser();
-//
-//
-//        $ingredient = $ingredientRepository->find($id);
-//
-//        $listIngrUser = $user->getListIngredient();
-//        if ($listIngrUser && $listIngrUser->getIngredients()->contains($ingredient)) {
-//            $listIngrUser->removeIngredient($ingredient);
-//            $em->flush();
-//            return new JsonResponse(['success' => true]);
-//        }
-//
-//        return new JsonResponse(['success' => false, 'message' => 'Ingrédient non présent dans le placard'], 400);
-//    }
-
 
     #[Route('/show/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
-        //var_dump($user);
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
