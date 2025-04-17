@@ -107,12 +107,17 @@
 				<div class="text-center mt-4">
 					<form method="GET" action="{{ path('app_listIngrUser_select') }}">
 						<label for="type_ingredient">Choisir un type d'ingrédient :</label>
+						{% if erreurType|default(null) %}
+							<div class="alert alert-danger mt-2">{{ erreurType }}</div>
+						{% endif %}
 						<select name="type_ingredient" id="type_ingredient" class="form-control mb-3">
+
 							<option value="" disabled selected>Sélectionner un type</option>
 							{% for type in typeIngredients %}
 								<option value="{{ type.value }}">{{ type.value|capitalize }}</option>
 							{% endfor %}
 						</select>
+
 						<button id="show-add-ingredient" class="btn btn-success rounded-pill px-4 py-2">Valider</button>
 					</form>
 				</div>
@@ -121,37 +126,30 @@
 
 
 		<script>
-			document.getElementById('ingredient-type').addEventListener('change', function () {
-let type = this.value;
-if (! type) 
-return;
+			document.querySelectorAll('.delete-ingredient-form').forEach(form => {
+				form.addEventListener('submit', function (event) {
+					event.preventDefault();
 
-
-fetch(`/placard/select/${type}`).then(response => response.json()).then(data => {
-if (data.html) {
-document.getElementById('ingredient-selection-form').innerHTML = data.html;
-}
-}).catch(error => console.error('Erreur :', error));
-});
-
-document.querySelectorAll('.delete-ingredient-form').forEach(form => {
-form.addEventListener('submit', function (event) {
-event.preventDefault();
-
-let formData = new FormData(this);
-fetch(this.action, {
-method: 'POST',
-body: formData,
-headers: {
-'X-Requested-With': 'XMLHttpRequest'
-}
-}).then(response => response.json()).then(data => {
-if (data.success) {
-document.getElementById('ingredient-' + data.ingredientId).remove();
-} else {
-alert(data.message);
-}
-}).catch(error => console.error('Erreur:', error));
-});
-});
+					let formData = new FormData(this);
+					fetch(this.action, {
+						method: 'POST',
+						body: formData,
+						headers: {
+							'X-Requested-With': 'XMLHttpRequest'
+						}
+					})
+							.then(response => response.json())
+							.then(data => {
+								if (data.success) {
+									document.getElementById('ingredient-' + data.ingredientId).remove();
+								} else {
+									alert(data.message);
+								}
+							})
+							.catch(error => console.error('Erreur:', error));
+				});
+			});
 		</script>
+
+	</div>
+</div>
