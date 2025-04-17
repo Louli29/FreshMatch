@@ -1,63 +1,71 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\Ingredient;
 use App\Entity\ListIngrUser;
+use App\Entity\User;
+use App\Enums\TypeIngredient;
+use App\Form\IngredientSelectionType;
+use App\Repository\IngredientRepository;
+use App\Repository\ListIngrUserRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-final class ListIngrUserController extends AbstractController
+#[Route('/placard')]
+#[IsGranted('ROLE_USER')]
+class ListIngrUserController extends AbstractController
 {
-
-
-    #[Route('/autocomplete/ingredients', name: 'autocomplete_ingredients', methods: ['GET'])]
-    public function autocompleteIngredients(Request $request, EntityManagerInterface $em): \Symfony\Component\HttpFoundation\JsonResponse
+    #[Route('/select', name: 'app_listIngrUser_select', methods: ['GET', 'POST'])]
+    public function selectIngredients(
+        Request $request,
+        IngredientRepository $ingredientRepository,
+        ListIngrUserRepository $listIngrUserRepository,
+        EntityManagerInterface $em
+    ): \Symfony\Component\HttpFoundation\Response
     {
-        $term = $request->query->get('term', '');
+        $type = $request->query->get('type_ingredient');
 
-
-        $ingredients = $em->getRepository(Ingredient::class)->createQueryBuilder('i')
-            ->where('i.name LIKE :term')
-            ->setParameter('term', $term . '%')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
-
-
-        $results = [];
-        foreach ($ingredients as $ingredient) {
-            $results[] = [
-                'id' => $ingredient->getId(),
-                'name' => $ingredient->getName(),
-            ];
+        if (!$type || !in_array($type, array_column(TypeIngredient::cases(), 'value'))) {
+            throw $this->createNotFoundException('Type d\'ingrédient invalide.');
         }
 
-        return $this->json($results);
-    }
-
-    #[Route('/add-ingredient', name: 'add_ingredient', methods: ['POST'])]
-    public function addIngredient(Request $request, EntityManagerInterface $em): \Symfony\Component\HttpFoundation\JsonResponse
-    {
         $user = $this->getUser();
         if (!$user) {
-            return $this->json(['error' => 'Utilisateur non connecté'], Response::HTTP_UNAUTHORIZED);
+            throw $this->createAccessDeniedException('Vous devez être connecté.');
         }
 
-        $data = json_decode($request->getContent(), true);
-        $ingredientId = $data['ingredient_id'] ?? null;
+        $listIngrUser = $user->getListIngredient();
+        $alreadyInPlacard = $listIngrUser ? $listIngrUser->getIngredient()->map(fn($i) => $i->getId())->toArray() : [];
 
-        if (!$ingredientId) {
-            return $this->json(['error' => 'ID ingrédient manquant'], Response::HTTP_BAD_REQUEST);
-        }
+        $ingredients = $ingredientRepository->findByTypeIngredient($type);
 
 
-        $ingredient = $em->getRepository(Ingredient::class)->find($ingredientId);
-        if (!$ingredient) {
-            return $this->json(['error' => 'Ingrédient introuvable'], Response::HTTP_NOT_FOUND);
+        $filteredIngredients = array_filter($ingredients, fn($ingredient) => !in_array($ingredient->getId(), $alreadyInPlacard));
+
+
+
+        return $this->render('list_ingr_user/ingredient_selection_form.html.twig', [
+            'ingredients' => $filteredIngredients,
+            'type' => $type
+        ]);
+    }
+
+
+
+    #[Route('/add', name: 'app_listIngrUser_add', methods: ['POST'])]
+    public function addToPlacard(Request $request, EntityManagerInterface $em, IngredientRepository $ingredientRepository): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
+        $user = $this->getUser();
+        $ingredientIds = $request->request->all('ingredients');
+
+        if (!$ingredientIds) {
+            $this->addFlash('warning', 'Aucun ingrédient sélectionné.');
+            return $this->redirectToRoute('app_user_account', ['id' => $user->getId()]);
         }
 
         $listIngrUser = $user->getListIngredient();
@@ -67,23 +75,59 @@ final class ListIngrUserController extends AbstractController
             $em->persist($listIngrUser);
         }
 
+        $alreadyInPlacard = $listIngrUser->getIngredient()->map(fn($i) => $i->getId())->toArray();
 
-        if (!$listIngrUser->getIngredient()->contains($ingredient)) {
-            $listIngrUser->addIngredient($ingredient);
-            $em->persist($listIngrUser);
-            $em->flush();
+        foreach ($ingredientIds as $ingredientId) {
+            if (in_array($ingredientId, $alreadyInPlacard)) {
+                $this->addFlash('info', 'L’ingrédient est déjà dans votre listIngrUser.');
+                continue;
+            }
+
+            $ingredient = $ingredientRepository->find($ingredientId);
+            if ($ingredient) {
+                $listIngrUser->addIngredient($ingredient);
+            }
         }
 
-        return $this->json([
-            'success' => 'Ingrédient ajouté au placard',
-            'ingredient' => [
-                'id' => $ingredient->getId(),
-                'name' => $ingredient->getName(),
-                'type' => $ingredient->getTypeIngredient()->value,
-            ]
-        ]);
+        $em->flush();
+        $this->addFlash('success', 'Ingrédients ajoutés à votre listIngrUser !');
+
+        return $this->redirectToRoute('app_user_account', ['id' => $user->getId()]);
     }
 
 
+    #[Route('/remove', name: 'app_listIngrUser_remove', methods: ['POST'])]
+    public function removeFromPlacard(Request $request, EntityManagerInterface $em, IngredientRepository $ingredientRepository):\Symfony\Component\HttpFoundation\RedirectResponse
+    {
+        $user = $this->getUser();
+        $ingredientId = $request->request->get('ingredient_id');
 
+
+        $ingredient = $ingredientRepository->find($ingredientId);
+        if (!$ingredient) {
+            $this->addFlash('warning', 'Ingrédients non trouvé dans la bdd !');
+            return $this->redirectToRoute('app_user_account', ['id' => $user->getId()]);
+        }
+
+        $listIngrUser = $user->getListIngredient();
+        if ($listIngrUser && $listIngrUser->getIngredient()->contains($ingredient)) {
+            $listIngrUser->removeIngredient($ingredient);
+            $em->flush();
+            return $this->redirectToRoute('app_user_account', ['id' => $user->getId()]);
+        }
+
+        return $this->redirectToRoute('app_user_account', ['id' => $user->getId()]);
+    }
+
+//inutile je crois
+    public function account(User $user, EntityManagerInterface $em): \Symfony\Component\HttpFoundation\Response
+    {
+
+        $typeIngredients = TypeIngredient::cases();
+
+        return $this->render('user/my_account.html.twig', [
+            'user' => $user,
+            'typeIngredients' => $typeIngredients,
+        ]);
+    }
 }

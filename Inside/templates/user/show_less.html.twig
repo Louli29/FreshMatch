@@ -91,7 +91,7 @@
 									<td>{{ ingredient.name }}</td>
 									<td>{{ ingredient.typeIngredient.value|capitalize }}</td>
 									<td>
-										<form method="POST" action="{{ path('app_placard_remove') }}" class="delete-ingredient-form">
+										<form method="POST" action="{{ path('app_listIngrUser_remove') }}" class="delete-ingredient-form">
 											<input type="hidden" name="ingredient_id" value="{{ ingredient.id }}">
 											<button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
 										</form>
@@ -105,7 +105,7 @@
 				{% endif %}
 
 				<div class="text-center mt-4">
-					<form method="GET" action="{{ path('app_placard_select') }}">
+					<form method="GET" action="{{ path('app_listIngrUser_select') }}">
 						<label for="type_ingredient">Choisir un type d'ingrédient :</label>
 						<select name="type_ingredient" id="type_ingredient" class="form-control mb-3">
 							<option value="" disabled selected>Sélectionner un type</option>
