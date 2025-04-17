@@ -1,0 +1,36 @@
+{% extends 'Main.html.twig' %}
+
+{% block main %}
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header text-center bg-success text-white">
+                        <h2>Sélectionner des ingrédients ({{ type|capitalize }})</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ path('app_listIngrUser_add') }}">
+                            <input type="hidden" name="type_ingredient" value="{{ type }}">
+
+                            <div class="mb-3">
+                                <h4 class="text-muted">Choisissez les ingrédients à ajouter à votre placard :</h4>
+                                <ul class="list-group">
+                                    {% for ingredient in ingredients %}
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <input type="checkbox" name="ingredients[]" value="{{ ingredient.id }}" class="form-check-input me-3">
+                                            <span>{{ ingredient.name }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success rounded-pill px-4 py-2">Valider la sélection</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
