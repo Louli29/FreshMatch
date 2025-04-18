@@ -30,7 +30,7 @@ class ListIngrUserRepository extends ServiceEntityRepository
 
 
     //    /**
-    //     * @return ListIngrUser[] Returns an array of ListIngrUser objects
+    //     * @return ListIngrUserService[] Returns an array of ListIngrUserService objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -44,7 +44,7 @@ class ListIngrUserRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?ListIngrUser
+    //    public function findOneBySomeField($value): ?ListIngrUserService
     //    {
     //        return $this->createQueryBuilder('l')
     //            ->andWhere('l.exampleField = :val')
