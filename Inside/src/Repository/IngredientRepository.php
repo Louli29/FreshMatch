@@ -29,26 +29,6 @@ class IngredientRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findIngredientsByUser(User $user): array
-    {
-        $qb = $this->createQueryBuilder('i')
-            ->select('i.name')
-            ->innerJoin('i.listIngrUsers', 'lu')
-            ->where('lu.user = :user')
-            ->setParameter('user', $user);
-
-        return array_column($qb->getQuery()->getResult(), 'name');
-    }
-
-
-
-    public function findDistinctIngredientTypes(): array
-    {
-        return $this->createQueryBuilder('i')
-            ->select('DISTINCT i.typeIngredient')
-            ->getQuery()
-            ->getSingleColumnResult();
-    }
     public function findByTypeIngredient(string $type): array
     {
         $typeEnum = TypeIngredient::tryFrom($type);
