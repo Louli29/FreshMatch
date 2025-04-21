@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Recipe;
 use App\Form\RecipeType;
 use App\Repository\RecipeRepository;
+use App\Service\RecipeSearchService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,36 +19,15 @@ use Symfony\Bundle\SecurityBundle\Security;
 final class RecipeController extends AbstractController
 {
 
-
-    #[Route(name: 'app_recipe_index', methods: ['GET'])]
-    public function index(RecipeRepository $recipeRepository): Response
-    {
-        return $this->render('recipe/index.html.twig', [
-            'recipes' => $recipeRepository->findAll(),
-        ]);
-    }
-
     #[Route('/result', name: 'app_recipe_search', methods: ['GET'])]
-    public function search(Request $request, EntityManagerInterface $em): Response
+    public function search(Request $request, RecipeSearchService $recipeSearchService): Response
     {
-        $ingredientNames = $request->query->all('ingredients');
-
+        $queryParams = $request->query;
+        $ingredientNames = $queryParams->get('ingredients');
         if (empty($ingredientNames)) {
             return $this->redirectToRoute('app_recipe_index');
         }
-
-        $qb = $em->createQueryBuilder();
-
-        $qb->select('r')
-            ->from('App\Entity\Recipe', 'r')
-            ->join('r.ingredientRecipe', 'ir')
-            ->join('ir.ingredient', 'i')
-            ->where($qb->expr()->in('i.name', ':names'))
-            ->setParameter('names', $ingredientNames)
-            ->groupBy('r.id');
-
-        $recipes = $qb->getQuery()->getResult();
-
+        $recipes = $recipeSearchService->findRecipesByIngredientNames($ingredientNames);
         return $this->render('recipe/index.html.twig', [
             'recipes' => $recipes,
         ]);

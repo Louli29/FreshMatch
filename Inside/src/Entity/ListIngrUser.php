@@ -53,13 +53,6 @@ class ListIngrUser
         return $this;
     }
 
-    public function removeIngredient(Ingredient $ingredient): static
-    {
-        $this->ingredient->removeElement($ingredient);
-
-        return $this;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;

@@ -49,21 +49,11 @@ class Ingredient
         return $this;
     }
 
-    public function getTypeIngredient(): ?TypeIngredient
-    {
-        return $this->typeIngredient;
-    }
-
     public function setTypeIngredient(TypeIngredient $typeIngredient): static
     {
         $this->typeIngredient = $typeIngredient;
 
         return $this;
-    }
-
-    public function getSeason(): ?array
-    {
-        return $this->season;
     }
 
     public function setSeason(array $season): self
